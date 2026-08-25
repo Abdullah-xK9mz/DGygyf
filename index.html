@@ -1,0 +1,282 @@
+<!doctype html>
+<html dir="rtl" lang="ar">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dark Gift 🎁</title>
+    <style>
+      :root {
+        --bg-gradient: radial-gradient(ellipse at center, #1b2d42 0%, #070a0f 85%);
+        --card-bg: rgba(15, 23, 36, 0.75);
+        --glow-border: rgba(56, 189, 248, 0.45);
+        --glow-box: 0 0 25px rgba(56, 189, 248, 0.15);
+        --glow-hover: 0 0 30px rgba(56, 189, 248, 0.35);
+        --accent-blue: #38bdf8;
+        --text-white: #f8fafc;
+        --text-sub: #94a3b8;
+        --gold-glow: #facc15;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body { 
+        background: var(--bg-gradient);
+        color: var(--text-white); 
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+        display: flex; 
+        flex-direction: column; 
+        align-items: center; 
+        justify-content: center; 
+        min-height: 100vh; 
+        padding: 20px;
+        overflow-x: hidden;
+      }
+
+      /* الهيدر والعناوين */
+      .header-container {
+        text-align: center;
+        margin-bottom: 35px;
+      }
+
+      h1 { 
+        font-size: 2.4rem; 
+        color: var(--accent-blue); 
+        margin-bottom: 6px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+      }
+
+      .sub-title {
+        font-size: 1.8rem;
+        color: var(--accent-blue);
+        font-weight: 700;
+        text-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
+      }
+
+      /* حاوية الكروت */
+      .menu-container {
+        display: flex;
+        flex-direction: row-reverse; /* ترتب من اليمين للشمال زي الصورة */
+        justify-content: center;
+        gap: 20px;
+        width: 100%;
+        max-width: 750px;
+        margin-bottom: 40px;
+      }
+
+      .menu-card {
+        display: flex;
+        align-items: center;
+        background: var(--card-bg);
+        border: 1.5px solid var(--glow-border);
+        box-shadow: var(--glow-box);
+        border-radius: 16px;
+        padding: 16px 20px;
+        text-decoration: none;
+        color: var(--text-white);
+        flex: 1;
+        min-width: 240px;
+        backdrop-filter: blur(12px);
+        transition: all 0.3s ease;
+      }
+
+      .menu-card:hover { 
+        border-color: var(--accent-blue); 
+        box-shadow: var(--glow-hover);
+        transform: translateY(-4px);
+      }
+
+      .card-img { 
+        width: 65px; 
+        height: 65px; 
+        object-fit: cover;
+        border-radius: 12px;
+        margin-left: 15px;
+        flex-shrink: 0;
+      }
+
+      .card-icon-reel {
+        width: 65px;
+        height: 65px;
+        margin-left: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 42px;
+        flex-shrink: 0;
+      }
+
+      .card-text {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .card-title {
+        font-size: 1.25rem;
+        font-weight: bold;
+        color: #ffffff;
+        margin-bottom: 6px;
+      }
+
+      .card-sub {
+        font-size: 0.88rem;
+        color: var(--text-sub);
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      /* كارت النصيحة والبركة المقتبس من الصورة */
+      .blessing-card {
+        width: 100%;
+        max-width: 580px;
+        background: var(--card-bg);
+        border: 1.5px solid var(--glow-border);
+        box-shadow: var(--glow-box);
+        border-radius: 20px;
+        padding: 28px 20px;
+        text-align: center;
+        backdrop-filter: blur(12px);
+      }
+
+      .daily-quote {
+        font-size: 1.1rem;
+        color: #ffffff;
+        font-weight: 600;
+        margin-bottom: 16px;
+      }
+
+      .quote-label {
+        color: var(--accent-blue);
+        font-weight: bold;
+      }
+
+      /* الزخرفة بين السطرين */
+      .decorative-line {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 15px 0;
+      }
+
+      .decorative-line::before,
+      .decorative-line::after {
+        content: "";
+        height: 1px;
+        width: 60px;
+        background: rgba(56, 189, 248, 0.3);
+      }
+
+      .decorative-symbol {
+        margin: 0 10px;
+        color: var(--accent-blue);
+        font-size: 14px;
+        opacity: 0.7;
+      }
+
+      .salawat {
+        font-size: 1.5rem;
+        color: var(--text-white);
+        font-weight: bold;
+        letter-spacing: 1px;
+        text-shadow: 0 0 12px rgba(250, 204, 21, 0.3);
+      }
+
+      .sparkle {
+        color: var(--gold-glow);
+        margin: 0 6px;
+      }
+
+      /* التجاوب التام مع الشاشات والموبايل */
+      @media (max-width: 650px) {
+        .menu-container {
+          flex-direction: column;
+          align-items: center;
+        }
+        .menu-card, .blessing-card {
+          width: 100%;
+          max-width: 330px;
+        }
+        h1 { font-size: 1.8rem; }
+        .sub-title { font-size: 1.4rem; }
+        .salawat { font-size: 1.25rem; }
+      }
+    </style>
+  </head>
+  <body>
+
+    <!-- الهيدر -->
+    <div class="header-container">
+      <h1>مرحباً بك في موقعي</h1>
+      <div class="sub-title">Dark Gift <span id="device-emoji">🎁</span></div>
+    </div>
+
+    <!-- الكروت الرئيسية -->
+    <div class="menu-container">
+        <!-- كارت خلفيات رائعة (يمين) -->
+        <a href="wallpapers.html" class="menu-card" id="wallpapers-btn">
+            <img src="https://i.postimg.cc/4y8CT3dF/wallpapers.png" alt="Wallpaper" class="card-img">
+            <div class="card-text">
+                <span class="card-title">خلفيات رائعة</span>
+                <span class="card-sub">🖼️ فتح الخلفيات</span>
+            </div>
+        </a>
+
+        <!-- كارت مكتبة الأفلام (شمال) -->
+        <a href="film.html" class="menu-card" id="films-btn">
+            <div class="card-icon-reel">🎞️</div>
+            <div class="card-text">
+                <span class="card-title">مكتبة الأفلام</span>
+                <span class="card-sub">🎬 فتح الأفلام</span>
+            </div>
+        </a>
+    </div>
+
+    <!-- كارت النصيحة والصلاة على النبي -->
+    <div class="blessing-card">
+      <p id="daily-quote" class="daily-quote">
+        💡 <span class="quote-label">نصيحة اليوم:</span> التوكل على الله هو مفتاح كل نجاح.
+      </p>
+
+      <div class="decorative-line">
+        <span class="decorative-symbol">⁓⁓</span>
+      </div>
+
+      <p class="salawat">
+        <span class="sparkle">✨</span> صَلِّ على النبي <span class="sparkle">✨</span>
+      </p>
+    </div>
+
+    <script>
+      function initAdaptiveRouting() {
+        const userAgent = navigator.userAgent.toLowerCase();
+        const emoji = document.getElementById('device-emoji');
+
+        if (/iphone|ipad|ipod/.test(userAgent)) {
+          emoji.innerText = "🍏"; 
+        } else if (/android/.test(userAgent)) {
+          emoji.innerText = ""; 
+        } else {
+          emoji.innerText = "💻"; 
+        }
+      }
+
+      // قائمة نصائح تتغير تلقائياً
+      const quotes = [
+        "التوكل على الله هو مفتاح كل نجاح.",
+        "ابدأ يومك بطلب التوفيق والبركة في رزقك وعملك.",
+        "الخطوات الصغيرة المستمرة هي سر الوصول للأهداف الكبيرة.",
+        "اترك أثراً طيباً أينما حللت، فالكلمة الطيبة صدقة."
+      ];
+
+      const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+      document.getElementById('daily-quote').innerHTML = `💡 <span class="quote-label">نصيحة اليوم:</span> ${randomQuote}`;
+
+      window.onload = initAdaptiveRouting;
+    </script>
+  </body>
+</html>
