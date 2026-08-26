@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>لعبه🎮</title>
 <title>صالة الألعاب 🎮</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
@@ -88,18 +87,16 @@
 
   .menu-btn:active{ transform: translateY(0); }
 
-  .back-link{
-    margin-top: 28px;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
+  /* زرار العودة للرئيسية بنفص الستايل مع إزاحة ممتازة عن اللعبة الأخيرة */
+  .back-btn{
+    margin-top: 32px;
+    border-color: rgba(255, 61, 127, 0.3);
     color: var(--pink);
-    text-decoration: none;
-    font-size: 13px;
-    font-weight: 700;
-    transition: opacity 0.2s;
   }
-  .back-link:hover{ opacity: 0.75; }
+  .back-btn:hover{
+    border-color: var(--pink);
+    box-shadow: 0 8px 20px -8px rgba(255, 61, 127, 0.35);
+  }
 </style>
 </head>
 <body>
@@ -112,9 +109,10 @@
     <a href="ox.html" class="menu-btn">لعبة إكس أو ❌⭕</a>
     <a href="flappy.html" class="menu-btn">الطائر المغامر 🐦</a>
     <a href="space_shooter.html" class="menu-btn">حرب الفضاء اللانهائية 🚀⚡</a>
-  </div>
 
-<button class="btn-main" style="padding:8px 20px; font-size:13px; background:var(--panel); color:var(--ink);" onclick="window.location.href='index.html'">الرئيسية 🏠</button>  </div>
+    <!-- زرار العودة للرئيسية مساحته مظبوطة ومفصول تحت برواقة -->
+    <a href="index.html" class="menu-btn back-btn">الرئيسية 🏠</a>
+  </div>
 
 </body>
 </html>
