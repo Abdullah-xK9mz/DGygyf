@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ورشة العدّة — أدوات رقمية صغيرة</title>
+  <!-- مكتبة QR أحدث وأدق في التعامل مع العربي والرموز -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap');
+
+    :root {
+      --bg-dark: #0f172a;
+      --card-bg: rgba(30, 41, 59, 0.7);
+      --card-border: rgba(255, 255, 255, 0.1);
+      --primary-cyan: #00f2fe;
+      --secondary-blue: #4facfe;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --danger: #ef4444;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Cairo', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(0, 242, 254, 0.15) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(79, 172, 254, 0.15) 0px, transparent 50%);
+      background-attachment: fixed;
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 900px;
+    }
+
+    /* ===== Header ===== */
+    header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    header h1 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--primary-cyan), var(--secondary-blue));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 8px;
+    }
+
+    header p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    /* ===== Grid Nav / Pegboard ===== */
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+
+    .tool-btn {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 20px 15px;
+      color: var(--text-main);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+      transition: all 0.2s ease;
+    }
+
+    .tool-btn .icon {
+      font-size: 1.8rem;
+    }
+
+    .tool-btn span {
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+
+    .tool-btn:hover {
+      border-color: var(--primary-cyan);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0, 242, 254, 0.15);
+    }
+
+    /* ===== Main Panel / Workbench ===== */
+    .workbench {
+      display: none;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 25px;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .back-btn {
+      background: transparent;
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 20px;
+      transition: all 0.2s;
+    }
+
+    .back-btn:hover {
+      color: var(--text-main);
+      border-color: var(--primary-cyan);
+    }
+
+    .panel-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--primary-cyan);
+      margin-bottom: 5px;
+    }
+
+    .panel-desc {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-bottom: 20px;
+    }
+
+    .tool-section {
+      display: none;
+    }
+
+    .tool-section.active {
+      display: block;
+    }
+
+    /* ===== Form Controls ===== */
+    label {
+      display: block;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin: 12px 0 6px;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    input[type="date"],
+    textarea,
+    select {
+      width: 100%;
+      padding: 12px;
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      color: var(--text-main);
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    input:focus, textarea:focus, select:focus {
+      border-color: var(--primary-cyan);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 90px;
+    }
+
+    .form-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .form-row > * {
+      flex: 1;
+      min-width: 140px;
+    }
+
+    .action-btn {
+      width: 100%;
+      background: linear-gradient(135deg, var(--primary-cyan), var(--secondary-blue));
+      color: #0f172a;
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      margin-top: 15px;
+      transition: opacity 0.2s;
+    }
+
+    .action-btn:hover {
+      opacity: 0.9;
+    }
+
+    .btn-ghost {
+      background: transparent;
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--primary-cyan);
+    }
+
+    .result-box {
+      margin-top: 18px;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px dashed var(--primary-cyan);
+      border-radius: 8px;
+      padding: 15px;
+      text-align: center;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--primary-cyan);
+      word-break: break-all;
+      direction: rtl;
+    }
+
+    /* ===== Tool Specifics ===== */
+    .calc-screen {
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 15px;
+      text-align: left;
+      direction: ltr;
+      font-size: 1.8rem;
+      color: var(--primary-cyan);
+      min-height: 60px;
+      margin-bottom: 12px;
+    }
+
+    .calc-expr {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      min-height: 18px;
+      text-align: left;
+      direction: ltr;
+    }
+
+    .calc-keys {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+
+    .calc-keys button {
+      padding: 14px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      color: var(--text-main);
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .calc-keys button:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .calc-keys button.op {
+      color: var(--primary-cyan);
+    }
+
+    .calc-keys button.eq {
+      background: var(--primary-cyan);
+      color: #0f172a;
+      grid-row: span 2;
+    }
+
+    .calc-keys button.clear {
+      color: var(--danger);
+    }
+
+    .dropzone {
+      border: 2px dashed var(--card-border);
+      border-radius: 8px;
+      padding: 30px 15px;
+      text-align: center;
+      color: var(--text-muted);
+      cursor: pointer;
+    }
+
+    .dropzone:hover {
+      border-color: var(--primary-cyan);
+      color: var(--text-main);
+    }
+
+    #qrOutput {
+      display: flex;
+      justify-content: center;
+      margin-top: 15px;
+    }
+
+    #qrCanvas {
+      border: 8px solid #fff;
+      border-radius: 8px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <header id="mainHeader">
+    <h1>ورشة العدّة</h1>
+    <p>أدوات رقمية سريعة ومفيدة في مكان واحد</p>
+  </header>
+
+  <nav class="tools-grid" id="toolsNav">
+    <button class="tool-btn" data-tool="calc"><span class="icon">🧮</span><span>حاسبة</span></button>
+    <button class="tool-btn" data-tool="units"><span class="icon">📐</span><span>تحويل وحدات</span></button>
+    <button class="tool-btn" data-tool="image"><span class="icon">🖼️</span><span>ضغط الصور</span></button>
+    <button class="tool-btn" data-tool="qr"><span class="icon">▦</span><span>نص إلى QR</span></button>
+    <button class="tool-btn" data-tool="password"><span class="icon">🔐</span><span>مولّد كلمات السر</span></button>
+    <button class="tool-btn" data-tool="bmi"><span class="icon">⚖️</span><span>حاسبة الكتلة</span></button>
+    <button class="tool-btn" data-tool="age"><span class="icon">🎂</span><span>حاسبة العمر</span></button>
+    <button class="tool-btn" data-tool="rand"><span class="icon">🎲</span><span>رقم عشوائي</span></button>
+  </nav>
+
+  <main class="workbench" id="workbench">
+    <button class="back-btn" onclick="showHome()">→ العودة للرئيسية</button>
+
+    <!-- الحاسبة -->
+    <section class="tool-section" id="tool-calc">
+      <h2 class="panel-title">الحاسبة</h2>
+      <p class="panel-desc">إجراء العمليات الحسابية السريعة</p>
+      <div class="calc-expr" id="calcExpr"></div>
+      <div class="calc-screen" id="calcScreen">0</div>
+      <div class="calc-keys">
+        <button class="clear" onclick="calcClear()">C</button>
+        <button onclick="calcBack()">⌫</button>
+        <button class="op" onclick="calcPct()">%</button>
+        <button class="op" onclick="calcOp('/')">÷</button>
+        <button onclick="calcNum('7')">7</button>
+        <button onclick="calcNum('8')">8</button>
+        <button onclick="calcNum('9')">9</button>
+        <button class="op" onclick="calcOp('*')">×</button>
+        <button onclick="calcNum('4')">4</button>
+        <button onclick="calcNum('5')">5</button>
+        <button onclick="calcNum('6')">6</button>
+        <button class="op" onclick="calcOp('-')">−</button>
+        <button onclick="calcNum('1')">1</button>
+        <button onclick="calcNum('2')">2</button>
+        <button onclick="calcNum('3')">3</button>
+        <button class="op" onclick="calcOp('+')">+</button>
+        <button onclick="calcNum('0')" style="grid-column: span 2;">0</button>
+        <button onclick="calcDot()">.</button>
+        <button class="eq" onclick="calcEq()">=</button>
+      </div>
+    </section>
+
+    <!-- تحويل الوحدات -->
+    <section class="tool-section" id="tool-units">
+      <h2 class="panel-title">تحويل الوحدات</h2>
+      <p class="panel-desc">تحويل الطول، الوزن، ودرجة الحرارة</p>
+      <label>نوع الوحدة</label>
+      <select id="unitType" onchange="setupUnitOptions()">
+        <option value="length">الطول</option>
+        <option value="weight">الوزن</option>
+        <option value="temp">درجة الحرارة</option>
+      </select>
+      <div class="form-row" style="margin-top: 10px;">
+        <div>
+          <label>من</label>
+          <input type="number" id="unitFromInput" value="1" oninput="convertUnits('from')">
+          <select id="unitFromSelect" onchange="convertUnits('from')" style="margin-top: 5px;"></select>
+        </div>
+        <div>
+          <label>إلى</label>
+          <input type="number" id="unitToInput" oninput="convertUnits('to')">
+          <select id="unitToSelect" onchange="convertUnits('from')" style="margin-top: 5px;"></select>
+        </div>
+      </div>
+    </section>
+
+    <!-- ضغط الصور -->
+    <section class="tool-section" id="tool-image">
+      <h2 class="panel-title">ضغط وتغيير حجم الصور</h2>
+      <p class="panel-desc">معالجة فورية داخل متصفحك دون رفع الصور</p>
+      <div class="dropzone" onclick="document.getElementById('imgInput').click()">
+        اضغط هنا لاختيار صورة
+        <input type="file" id="imgInput" accept="image/*" style="display:none;" onchange="handleImageSelect(this.files[0])">
+      </div>
+      <div id="imgControls" style="display:none; margin-top: 15px;">
+        <div class="form-row">
+          <div>
+            <label>أقصى عرض (بكسل)</label>
+            <input type="number" id="imgMaxW" value="1200">
+          </div>
+          <div>
+            <label>الجودة (1 - 100)</label>
+            <input type="number" id="imgQuality" value="80" min="1" max="100">
+          </div>
+        </div>
+        <button class="action-btn" onclick="processImage()">ضغط الصورة</button>
+        <div class="result-box" id="imgResultBox" style="display:none;">
+          <img id="imgPreview" style="max-width: 100%; border-radius: 8px; margin-bottom: 10px;">
+          <br>
+          <a id="imgDownloadLink" class="action-btn btn-ghost" style="display:inline-block; text-decoration:none;" download="compressed.jpg">تحميل الصورة</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- QR Code -->
+    <section class="tool-section" id="tool-qr">
+      <h2 class="panel-title">تحويل نص إلى QR</h2>
+      <p class="panel-desc">أنشئ رمز QR لأي رابط أو نص عربي أو إنجليزي</p>
+      <label>النص أو الرابط</label>
+      <textarea id="qrTextInput" placeholder="اكتب النص هنا..."></textarea>
+      <button class="action-btn" onclick="generateQR()">توليد الرمز</button>
+      <div id="qrOutput">
+        <canvas id="qrCanvas"></canvas>
+      </div>
+    </section>
+
+    <!-- مولد كلمات السر -->
+    <section class="tool-section" id="tool-password">
+      <h2 class="panel-title">مولّد كلمات السر</h2>
+      <p class="panel-desc">توليد كلمات سر قوية وعشوائية</p>
+      <label>الطول: <span id="passLenDisplay">16</span></label>
+      <input type="range" id="passLen" min="6" max="32" value="16" style="width: 100%; accent-color: var(--primary-cyan);" oninput="document.getElementById('passLenDisplay').textContent = this.value; generatePassword();">
+      <div class="result-box" id="passOutput">------</div>
+      <button class="action-btn" onclick="generatePassword()">توليد جديدة</button>
+      <button class="action-btn btn-ghost" onclick="copyPassword()" style="margin-top: 8px;">نسخ كلمة السر</button>
+    </section>
+
+    <!-- حاسبة الكتلة -->
+    <section class="tool-section" id="tool-bmi">
+      <h2 class="panel-title">حاسبة كتلة الجسم (BMI)</h2>
+      <p class="panel-desc">حساب مؤشر كتلة الجسم</p>
+      <div class="form-row">
+        <div>
+          <label>الوزن (كجم)</label>
+          <input type="number" id="bmiWeight" value="70" oninput="calculateBMI()">
+        </div>
+        <div>
+          <label>الطول (سم)</label>
+          <input type="number" id="bmiHeight" value="170" oninput="calculateBMI()">
+        </div>
+      </div>
+      <div class="result-box" id="bmiOutput">أدخل بياناتك</div>
+    </section>
+
+    <!-- حاسبة العمر -->
+    <section class="tool-section" id="tool-age">
+      <h2 class="panel-title">حاسبة العمر الدقيقة</h2>
+      <p class="panel-desc">احسب عمرك بالتفصيل (سنة، شهر، يوم)</p>
+      <label>تاريخ الميلاد</label>
+      <input type="date" id="ageInput" onchange="calculateAge()">
+      <div class="result-box" id="ageOutput">اختر تاريخ ميلادك</div>
+    </section>
+
+    <!-- رقم عشوائي -->
+    <section class="tool-section" id="tool-rand">
+      <h2 class="panel-title">مولّد أرقام عشوائية</h2>
+      <p class="panel-desc">اختر نطاق الأرقام المطلوب</p>
+      <div class="form-row">
+        <div>
+          <label>من</label>
+          <input type="number" id="randMin" value="1">
+        </div>
+        <div>
+          <label>إلى</label>
+          <input type="number" id="randMax" value="100">
+        </div>
+      </div>
+      <div class="result-box" id="randOutput">—</div>
+      <button class="action-btn" onclick="generateRandomNum()">توليد رقم</button>
+    </section>
+
+  </main>
+
+</div>
+
+<script>
+  /* ===== Navigation ===== */
+  const toolsNav = document.getElementById('toolsNav');
+  const mainHeader = document.getElementById('mainHeader');
+  const workbench = document.getElementById('workbench');
+
+  document.querySelectorAll('.tool-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const toolId = btn.dataset.tool;
+      
+      document.querySelectorAll('.tool-section').forEach(sec => sec.classList.remove('active'));
+      document.getElementById('tool-' + toolId).classList.add('active');
+
+      toolsNav.style.display = 'none';
+      mainHeader.style.display = 'none';
+      workbench.style.display = 'block';
+    });
+  });
+
+  function showHome() {
+    workbench.style.display = 'none';
+    toolsNav.style.display = 'grid';
+    mainHeader.style.display = 'block';
+  }
+
+  /* ===== 1. Calculator Logic ===== */
+  let calcCur = '0', calcPrev = null, calcOpVal = null, calcReset = false;
+
+  function calcRender() {
+    document.getElementById('calcScreen').textContent = calcCur;
+    document.getElementById('calcExpr').textContent = calcPrev !== null ? `${calcPrev} ${calcOpVal}` : '';
+  }
+
+  function calcNum(n) {
+    if (calcReset) { calcCur = n; calcReset = false; }
+    else { calcCur = calcCur === '0' ? n : calcCur + n; }
+    calcRender();
+  }
+
+  function calcDot() {
+    if (calcReset) { calcCur = '0.'; calcReset = false; calcRender(); return; }
+    if (!calcCur.includes('.')) calcCur += '.';
+    calcRender();
+  }
+
+  function calcClear() { calcCur = '0'; calcPrev = null; calcOpVal = null; calcReset = false; calcRender(); }
+  function calcBack() { calcCur = calcCur.length > 1 ? calcCur.slice(0, -1) : '0'; calcRender(); }
+  function calcPct() { calcCur = String(parseFloat(calcCur) / 100); calcRender(); }
+
+  function calcOp(op) {
+    if (calcOpVal !== null && !calcReset) calcEq();
+    calcPrev = calcCur;
+    calcOpVal = op;
+    calcReset = true;
+    calcRender();
+  }
+
+  function calcEq() {
+    if (calcOpVal === null) return;
+    const a = parseFloat(calcPrev);
+    const b = parseFloat(calcCur);
+    let res = 0;
+    if (calcOpVal === '+') res = a + b;
+    if (calcOpVal === '-') res = a - b;
+    if (calcOpVal === '*') res = a * b;
+    if (calcOpVal === '/') res = b === 0 ? 'خطأ' : a / b;
+
+    calcCur = String(res);
+    calcPrev = null;
+    calcOpVal = null;
+    calcReset = true;
+    calcRender();
+  }
+
+  /* ===== 2. Unit Converter ===== */
+  const unitData = {
+    length: { 'سم': 0.01, 'متر': 1, 'كم': 1000, 'إنش': 0.0254 },
+    weight: { 'جم': 0.001, 'كجم': 1, 'طن': 1000, 'رطل': 0.453592 },
+    temp: ['مئوية', 'فهرنهايت']
+  };
+
+  function setupUnitOptions() {
+    const type = document.getElementById('unitType').value;
+    const fromSel = document.getElementById('unitFromSelect');
+    const toSel = document.getElementById('unitToSelect');
+    fromSel.innerHTML = ''; toSel.innerHTML = '';
+
+    const keys = type === 'temp' ? unitData.temp : Object.keys(unitData[type]);
+    keys.forEach(k => {
+      fromSel.innerHTML += `<option value="${k}">${k}</option>`;
+      toSel.innerHTML += `<option value="${k}">${k}</option>`;
+    });
+    toSel.selectedIndex = 1;
+    convertUnits('from');
+  }
+
+  function convertUnits(dir) {
+    const type = document.getElementById('unitType').value;
+    const from = document.getElementById('unitFromSelect').value;
+    const to = document.getElementById('unitToSelect').value;
+    const inFrom = document.getElementById('unitFromInput');
+    const inTo = document.getElementById('unitToInput');
+
+    if (dir === 'from') {
+      let val = parseFloat(inFrom.value) || 0;
+      if (type === 'temp') {
+        inTo.value = from === 'مئوية' && to === 'فهرنهايت' ? (val * 9/5) + 32 : (from === 'فهرنهايت' && to === 'مئوية' ? (val - 32) * 5/9 : val);
+      } else {
+        let base = val * unitData[type][from];
+        inTo.value = (base / unitData[type][to]).toFixed(3);
+      }
+    }
+  }
+  setupUnitOptions();
+
+  /* ===== 3. Image Compression ===== */
+  let selectedImgFile = null;
+
+  function handleImageSelect(file) {
+    if (!file) return;
+    selectedImgFile = file;
+    document.getElementById('imgControls').style.display = 'block';
+  }
+
+  function processImage() {
+    if (!selectedImgFile) return;
+    const maxW = parseInt(document.getElementById('imgMaxW').value) || 1200;
+    const quality = (parseInt(document.getElementById('imgQuality').value) || 80) / 100;
+
+    const img = new Image();
+    img.onload = () => {
+      let w = img.width, h = img.height;
+      if (w > maxW) { h = Math.round(h * (maxW / w)); w = maxW; }
+
+      const canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+
+      canvas.toBlob(blob => {
+        const url = URL.createObjectURL(blob);
+        document.getElementById('imgPreview').src = url;
+        document.getElementById('imgDownloadLink').href = url;
+        document.getElementById('imgResultBox').style.display = 'block';
+      }, 'image/jpeg', quality);
+    };
+    img.src = URL.createObjectURL(selectedImgFile);
+  }
+
+  /* ===== 4. QR Generator (المصحح بدعم UTF-8) ===== */
+  function generateQR() {
+    const txt = document.getElementById('qrTextInput').value.trim();
+    const canvas = document.getElementById('qrCanvas');
+    if (!txt) {
+      canvas.style.display = 'none';
+      return;
+    }
+
+    // تحويل النص إلى UTF-8 لحل أي مشكلة أرقام، فواصل، أو حروف عربية
+    const utf8Text = unescape(encodeURIComponent(txt));
+
+    new QRious({
+      element: canvas,
+      value: utf8Text,
+      size: 220,
+      level: 'H'
+    });
+
+    canvas.style.display = 'block';
+  }
+
+  /* ===== 5. Password Generator ===== */
+  function generatePassword() {
+    const len = parseInt(document.getElementById('passLen').value);
+    const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()';
+    let res = '';
+    for (let i = 0; i < len; i++) {
+      res += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    document.getElementById('passOutput').textContent = res;
+  }
+  generatePassword();
+
+  function copyPassword() {
+    const text = document.getElementById('passOutput').textContent;
+    navigator.clipboard.writeText(text);
+    alert('تم النسخ إلى الحافظة!');
+  }
+
+  /* ===== 6. BMI Calculator ===== */
+  function calculateBMI() {
+    const w = parseFloat(document.getElementById('bmiWeight').value);
+    const h = parseFloat(document.getElementById('bmiHeight').value) / 100;
+    if (!w || !h) return;
+    const bmi = (w / (h * h)).toFixed(1);
+    let status = '';
+    if (bmi < 18.5) status = 'نقص وزن';
+    else if (bmi < 25) status = 'وزن طبيعي';
+    else if (bmi < 30) status = 'زيادة وزن';
+    else status = 'سمنة';
+    document.getElementById('bmiOutput').innerHTML = `المؤشر: ${bmi} — (${status})`;
+  }
+  calculateBMI();
+
+  /* ===== 7. Age Calculator (المصححة والمفصلة) ===== */
+  function calculateAge() {
+    const val = document.getElementById('ageInput').value;
+    if (!val) return;
+    
+    const birth = new Date(val);
+    const now = new Date();
+
+    if (birth > now) {
+      document.getElementById('ageOutput').textContent = "تاريخ الميلاد لا يمكن أن يكون في المستقبل!";
+      return;
+    }
+
+    let years = now.getFullYear() - birth.getFullYear();
+    let months = now.getMonth() - birth.getMonth();
+    let days = now.getDate() - birth.getDate();
+
+    if (days < 0) {
+      months--;
+      // الحصول على عدد أيام الشهر السابق
+      const prevMonthLastDay = new Date(now.getFullYear(), now.getMonth(), 0).getDate();
+      days += prevMonthLastDay;
+    }
+
+    if (months < 0) {
+      years--;
+      months += 12;
+    }
+
+    document.getElementById('ageOutput').textContent = `العمر: ${years} سنة، و ${months} شهر، و ${days} يوم`;
+  }
+
+  /* ===== 8. Random Number ===== */
+  function generateRandomNum() {
+    const min = parseInt(document.getElementById('randMin').value) || 0;
+    const max = parseInt(document.getElementById('randMax').value) || 100;
+    const res = Math.floor(Math.random() * (max - min + 1)) + min;
+    document.getElementById('randOutput').textContent = res;
+  }
+</script>
+
+</body>
+</html>
