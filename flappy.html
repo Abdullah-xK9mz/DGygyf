@@ -226,12 +226,12 @@
 
         <button class="pause-btn" onclick="pauseGame()">⏸</button>
 
-      <div id="pauseOverlay">
-    <h2>⏸ توقف مؤقت</h2>
-    <div class="pause-actions">
-        <button class="pause-resume" onclick="resumeGame()">استمرار ▶️</button>
-<button class="btn-main" style="padding:8px 20px; font-size:13px; background:var(--panel); color:var(--ink);" onclick="window.location.href='games.html'">الألعاب 🎮</button>    </div>
-</div>
+        <div id="pauseOverlay">
+            <h2>⏸ توقف مؤقت</h2>
+            <div class="pause-actions">
+                <button class="pause-resume" onclick="resumeGame()">استمرار ▶️</button>
+                <button class="btn-main" style="padding:8px 20px; font-size:13px; background:var(--panel); color:var(--ink);" onclick="window.location.href='games.html'">الألعاب 🎮</button>
+            </div>
         </div>
 
         <div id="msg-screen">
@@ -257,7 +257,27 @@
 
         let birdY = screenHeight / 2;
         let velocity = 0;
-function birdJump(){
+        let gravity = 0.35;
+        const jump = -6.5;
+
+        let score = 0;
+        let gameActive = false;
+        let pipes = [];
+        let gameLoopInterval;
+        let pipeGeneratorTimeout;
+
+        let currentSpeed = 3.0;
+        let currentGap = 165;
+        let spawnRate = 1600;
+
+        let lastTopHeight = null;
+
+        window.addEventListener('resize', () => {
+            screenWidth = container.clientWidth;
+            screenHeight = container.clientHeight;
+        });
+
+        function birdJump(){
             if(!gameActive) return;
             velocity = jump;
             bird.style.transform = "rotate(-25deg)";
@@ -271,7 +291,7 @@ function birdJump(){
         }
 
         container.addEventListener('touchstart', (e) => {
-            if (isUIElement(e.target)) return; // لو الزرار سيب الحدث يشتغل طبيعي
+            if (isUIElement(e.target)) return;
             e.preventDefault();
             birdJump();
         }, { passive: false });
@@ -280,31 +300,6 @@ function birdJump(){
             if (!isUIElement(e.target)) birdJump();
         });
 
-        document.addEventListener('keydown', (e) => {
-            if(e.key === ' ' || e.code === 'Space'){
-                e.preventDefault();
-                birdJump();
-            }
-        });
-
-        window.addEventListener('resize', () => {
-            screenWidth = container.clientWidth;
-            screenHeight = container.clientHeight;
-        });
-
-        function birdJump(){
-            if(!gameActive) return;
-            velocity = jump;
-            bird.style.transform = "rotate(-25deg)";
-        }
-
-        container.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            birdJump();
-        });
-        container.addEventListener('mousedown', (e) => {
-            if(e.target.id !== 'start-btn' && !e.target.closest('.pause-btn') && !e.target.closest('#pauseOverlay')) birdJump();
-        });
         document.addEventListener('keydown', (e) => {
             if(e.key === ' ' || e.code === 'Space'){
                 e.preventDefault();
@@ -453,6 +448,5 @@ function birdJump(){
             pipeGeneratorTimeout = setTimeout(createPipePair, spawnRate);
         }
     </script>
-
 </body>
 </html>
