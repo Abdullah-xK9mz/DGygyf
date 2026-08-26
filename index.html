@@ -248,7 +248,6 @@
     <!-- كارت النصيحة والصلاة على النبي -->
     <div class="blessing-card">
       <p id="daily-quote" class="daily-quote">
-        💡 <span class="quote-label">نصيحة اليوم:</span> التوكل على الله هو مفتاح كل نجاح.
       </p>
 
       <div class="decorative-line">
@@ -274,16 +273,9 @@
         }
       }
 
-      // قائمة نصائح تتغير تلقائياً
-      const quotes = [
-        "التوكل على الله هو مفتاح كل نجاح.",
-        "ابدأ يومك بطلب التوفيق والبركة في رزقك وعملك.",
-        "الخطوات الصغيرة المستمرة هي سر الوصول للأهداف الكبيرة.",
-        "اترك أثراً طيباً أينما حللت، فالكلمة الطيبة صدقة."
       ];
 
       const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
-      document.getElementById('daily-quote').innerHTML = `💡 <span class="quote-label">نصيحة اليوم:</span> ${randomQuote}`;
 
       window.onload = initAdaptiveRouting;
     </script>
