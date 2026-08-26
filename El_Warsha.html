@@ -66,10 +66,10 @@
       font-size: 0.95rem;
     }
 
-    /* ===== Grid Nav / Pegboard ===== */
+    /* ===== Grid Nav / Pegboard (تصميم الكمبيوتر الأفتراضي) ===== */
     .tools-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      grid-template-columns: repeat(4, 1fr); /* 4 أعمدة في الكمبيوتر */
       gap: 15px;
       margin-bottom: 25px;
     }
@@ -78,7 +78,7 @@
       background: var(--card-bg);
       border: 1px solid var(--card-border);
       border-radius: 12px;
-      padding: 20px 15px;
+      padding: 20px 15px; /* الحجم الكبير الأصلي */
       color: var(--text-main);
       display: flex;
       flex-direction: column;
@@ -102,6 +102,27 @@
       border-color: var(--primary-cyan);
       transform: translateY(-3px);
       box-shadow: 0 8px 20px rgba(0, 242, 254, 0.15);
+    }
+
+    /* ===== Media Query للشاشات الصغيرة (الموبايل) ===== */
+    @media (max-width: 650px) {
+      .tools-grid {
+        grid-template-columns: repeat(2, 1fr); /* عمودين في الموبايل */
+        gap: 10px;
+      }
+
+      .tool-btn {
+        padding: 10px 8px; /* تصغير حجم الكارت للموبايل */
+        gap: 4px;
+      }
+
+      .tool-btn .icon {
+        font-size: 1.3rem;
+      }
+
+      .tool-btn span {
+        font-size: 0.8rem;
+      }
     }
 
     /* ===== Main Panel / Workbench ===== */
@@ -656,7 +677,6 @@
       return;
     }
 
-    // تحويل النص إلى UTF-8 لحل أي مشكلة أرقام، فواصل، أو حروف عربية
     const utf8Text = unescape(encodeURIComponent(txt));
 
     new QRious({
@@ -721,7 +741,6 @@
 
     if (days < 0) {
       months--;
-      // الحصول على عدد أيام الشهر السابق
       const prevMonthLastDay = new Date(now.getFullYear(), now.getMonth(), 0).getDate();
       days += prevMonthLastDay;
     }
