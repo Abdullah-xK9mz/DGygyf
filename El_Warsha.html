@@ -67,7 +67,7 @@
       gap: 15px;
       margin-bottom: 25px;
     }
-    .tool-btn, .nav-home-btn {
+    .tool-btn {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
       border-radius: 12px;
@@ -83,35 +83,82 @@
       transition: all 0.2s ease;
       text-decoration: none;
     }
-    .tool-btn .icon, .nav-home-btn .icon {
+    .tool-btn .icon {
       font-size: 1.8rem;
     }
-    .tool-btn span, .nav-home-btn span {
+    .tool-btn span {
       font-size: 0.95rem;
       font-weight: 600;
     }
-    .tool-btn:hover, .nav-home-btn:hover {
+    .tool-btn:hover {
       border-color: var(--primary-cyan);
       transform: translateY(-3px);
       box-shadow: 0 8px 20px rgba(0, 242, 254, 0.15);
     }
+
+    /* ===== زر الرئيسية المنفصل (مساحة مستطيلين) ===== */
+    .nav-home-btn {
+      grid-column: span 2; /* ياخد مساحة مربعين/مستطيلين */
+      background: linear-gradient(135deg, rgba(0, 242, 254, 0.15), rgba(79, 172, 254, 0.15));
+      border: 1px solid rgba(0, 242, 254, 0.4);
+      border-radius: 12px;
+      padding: 20px 15px;
+      color: var(--primary-cyan);
+      display: flex;
+      flex-direction: row; /* تنسيق أفقي مميز */
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+    .nav-home-btn .icon {
+      font-size: 1.8rem;
+    }
+    .nav-home-btn span {
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+    .nav-home-btn:hover {
+      background: linear-gradient(135deg, rgba(0, 242, 254, 0.25), rgba(79, 172, 254, 0.25));
+      border-color: var(--primary-cyan);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(0, 242, 254, 0.3);
+      color: #fff;
+    }
+
     /* ===== Media Query للموبايل ===== */
     @media (max-width: 650px) {
       .tools-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 10px;
       }
-      .tool-btn, .nav-home-btn {
+      .tool-btn {
         padding: 12px 8px;
         gap: 4px;
       }
-      .tool-btn .icon, .nav-home-btn .icon {
+      .tool-btn .icon {
         font-size: 1.3rem;
       }
-      .tool-btn span, .nav-home-btn span {
+      .tool-btn span {
         font-size: 0.8rem;
       }
+      .nav-home-btn {
+        grid-column: span 2; /* يفضل مستحوذ على العرض بالكامل في الموبايل */
+        padding: 14px 10px;
+        gap: 8px;
+      }
+      .nav-home-btn .icon {
+        font-size: 1.4rem;
+      }
+      .nav-home-btn span {
+        font-size: 0.9rem;
+      }
     }
+
     /* ===== Main Panel / Workbench ===== */
     .workbench {
       display: none;
@@ -328,7 +375,9 @@
     <button class="tool-btn" data-tool="bmi"><span class="icon">⚖️</span><span>حاسبة الكتلة</span></button>
     <button class="tool-btn" data-tool="age"><span class="icon">🎂</span><span>حاسبة العمر</span></button>
     <button class="tool-btn" data-tool="barcode"><span class="icon">📊</span><span>مولّد البار كود</span></button>
-    <a href="index.html" class="nav-home-btn"><span class="icon">🏠</span><span>الرئيسية</span></a>
+    
+    <!-- زر العودة للرئيسية المنفصل بعرض عمودين -->
+    <a href="index.html" class="nav-home-btn"><span class="icon">🏠</span><span>العودة للموقع الرئيسي</span></a>
   </nav>
 
   <main class="workbench" id="workbench">
