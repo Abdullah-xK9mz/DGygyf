@@ -257,20 +257,35 @@
 
         let birdY = screenHeight / 2;
         let velocity = 0;
-        let gravity = 0.35;
-        const jump = -6.5;
+function birdJump(){
+            if(!gameActive) return;
+            velocity = jump;
+            bird.style.transform = "rotate(-25deg)";
+        }
 
-        let score = 0;
-        let gameActive = false;
-        let pipes = [];
-        let gameLoopInterval;
-        let pipeGeneratorTimeout;
+        // فحص هل الضغطة جاية من عناصر التحكم
+        function isUIElement(target) {
+            return target.id === 'start-btn' || 
+                   target.closest('.pause-btn') || 
+                   target.closest('#pauseOverlay');
+        }
 
-        let currentSpeed = 3.0;
-        let currentGap = 165;
-        let spawnRate = 1600;
+        container.addEventListener('touchstart', (e) => {
+            if (isUIElement(e.target)) return; // لو الزرار سيب الحدث يشتغل طبيعي
+            e.preventDefault();
+            birdJump();
+        }, { passive: false });
 
-        let lastTopHeight = null;
+        container.addEventListener('mousedown', (e) => {
+            if (!isUIElement(e.target)) birdJump();
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if(e.key === ' ' || e.code === 'Space'){
+                e.preventDefault();
+                birdJump();
+            }
+        });
 
         window.addEventListener('resize', () => {
             screenWidth = container.clientWidth;
