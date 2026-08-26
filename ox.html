@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>إكس أو | تحدي العقل</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0a0c10;
+    --panel: #12151c;
+    --panel-line: #232833;
+    --ink: #e7ebf2;
+    --ink-dim: #8892a0;
+    --pink: #ff3d7f;
+    --pink-dim: #3d1526;
+    --cyan: #3ec9d6;
+    --cyan-dim: #14343a;
+    --win: #52d17c;
+    --cell-bg: #0d1016;
+    --cell-hover: #171b24;
+  }
+
+  [data-theme="light"]{
+    --bg: #eef1f6;
+    --panel: #ffffff;
+    --panel-line: #e0e4ec;
+    --ink: #1b2130;
+    --ink-dim: #6b7280;
+    --pink: #ff3d7f;
+    --pink-dim: #ffd9e6;
+    --cyan: #0891a8;
+    --cyan-dim: #d3f2f6;
+    --win: #1a9c56;
+    --cell-bg: #f4f6fa;
+    --cell-hover: #e8ecf3;
+  }
+
+  *{ box-sizing: border-box; }
+
+  body{
+    margin:0;
+    background: var(--bg);
+    background-image:
+      radial-gradient(circle at 10% 0%, rgba(62,201,214,0.08), transparent 40%),
+      radial-gradient(circle at 90% 100%, rgba(255,61,127,0.08), transparent 40%);
+    color: var(--ink);
+    font-family: 'IBM Plex Sans Arabic', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 50px 14px 34px;
+    transition: background 0.3s, color 0.3s;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .mono{ font-family: 'JetBrains Mono', monospace; }
+
+  .theme-btn{
+    position: fixed;
+    top: 14px;
+    left: 14px;
+    background: var(--panel);
+    color: var(--ink);
+    border: 1px solid var(--panel-line);
+    padding: 8px 14px;
+    border-radius: 999px;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 600;
+    font-size: 12.5px;
+    z-index: 10;
+    transition: 0.2s;
+  }
+  .theme-btn:hover{ border-color: var(--cyan); }
+
+  .eyebrow{
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--ink-dim);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  h1{
+    font-size: clamp(22px, 5vw, 30px);
+    font-weight: 700;
+    margin: 0 0 18px;
+    text-align:center;
+    letter-spacing: -0.5px;
+  }
+  h1 span{ color: var(--cyan); }
+
+  .hud{
+    display:flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content:center;
+    margin-bottom: 14px;
+  }
+
+  .stat-pill{
+    background: var(--panel);
+    border: 1px solid var(--panel-line);
+    border-radius: 12px;
+    padding: 10px 18px;
+    display:flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--ink-dim);
+  }
+  .stat-pill b{
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 16px;
+    font-weight: 700;
+  }
+  .stat-player b{ color: var(--cyan); }
+  .stat-comp b{ color: var(--pink); }
+
+  .select-wrap{ position: relative; }
+
+  select{
+    background: var(--panel);
+    color: var(--ink);
+    border: 1px solid var(--panel-line);
+    padding: 10px 16px;
+    font-size: 13px;
+    font-family: inherit;
+    font-weight: 600;
+    border-radius: 12px;
+    outline: none;
+    cursor: pointer;
+    appearance: none;
+    padding-left: 30px;
+  }
+  select:focus{ border-color: var(--cyan); }
+
+  .select-wrap::after{
+    content: "▾";
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--ink-dim);
+    pointer-events: none;
+    font-size: 12px;
+  }
+
+  #status{
+    background: var(--panel);
+    border: 1px solid var(--panel-line);
+    border-radius: 999px;
+    padding: 9px 20px;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--cyan);
+    margin-bottom: 18px;
+    text-align: center;
+    min-width: 200px;
+  }
+
+  .board{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    background: var(--panel);
+    padding: 14px;
+    border-radius: 18px;
+    border: 1px solid var(--panel-line);
+    width: 90%;
+    max-width: 320px;
+    aspect-ratio: 1 / 1;
+    box-sizing: border-box;
+    margin-bottom: 22px;
+  }
+
+  .cell{
+    background-color: var(--cell-bg);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.6rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    user-select: none;
+    border: 1px solid var(--panel-line);
+  }
+
+  @media (hover: hover){
+    .cell:hover{
+      background-color: var(--cell-hover);
+      transform: translateY(-2px);
+    }
+  }
+
+  .cell:active{ transform: scale(0.95); }
+  .cell.x{ color: var(--cyan); text-shadow: 0 0 15px rgba(62,201,214,0.4); }
+  .cell.o{ color: var(--pink); text-shadow: 0 0 15px rgba(255,61,127,0.4); }
+
+  .actions{
+    display:flex;
+    flex-direction: column;
+    align-items:center;
+    gap: 12px;
+  }
+
+  #reset-btn{
+    padding: 12px 30px;
+    font-size: 14px;
+    font-weight: 700;
+    font-family: inherit;
+    background: transparent;
+    color: var(--cyan);
+    border: 2px solid var(--cyan);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.25s;
+  }
+  #reset-btn:hover{ background: var(--cyan); color: #04202a; }
+
+  .back-btn{
+    color: var(--ink-dim);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+    transition: 0.2s;
+  }
+  .back-btn:hover{ color: var(--ink); }
+
+  #matchOverlay{
+    display:none;
+    position: fixed;
+    inset:0;
+    background: rgba(6,7,10,0.92);
+    backdrop-filter: blur(6px);
+    z-index: 999;
+    justify-content:center;
+    align-items:center;
+    flex-direction: column;
+    padding: 24px;
+    text-align:center;
+  }
+  #matchOverlay h2{
+    font-size: clamp(24px, 6vw, 34px);
+    margin: 0 0 10px;
+  }
+  #matchOverlay p{
+    font-size: 15px;
+    color: var(--ink-dim);
+    margin: 0 0 26px;
+    max-width: 320px;
+  }
+  .match-btn{
+    background: var(--cyan);
+    color: #04202a;
+    border:none;
+    padding: 13px 28px;
+    border-radius: 10px;
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 15px;
+    cursor: pointer;
+  }
+  .match-btn:hover{ filter: brightness(1.1); }
+</style>
+</head>
+<body>
+
+
+  <div id="matchOverlay">
+    <h2 id="matchTitle">🏆 فزت بالمباراة!</h2>
+    <p id="matchDesc"></p>
+    <button class="match-btn" onclick="closeMatch()">مباراة جديدة 🔄</button>
+  </div>
+
+  <div class="eyebrow">تحدي المنطق الكلاسيكي</div>
+  <h1>إكس <span>أو</span> ❌⭕</h1>
+
+  <div class="hud">
+    <div class="stat-pill stat-player">أنت (❌) <b id="p-score">0</b></div>
+    <div class="stat-pill stat-comp">الآلة (⭕) <b id="c-score">0</b></div>
+    <div class="select-wrap">
+      <select id="difficulty" onchange="resetFullGame()">
+        <option value="easy" selected>سهل 🥱</option>
+        <option value="medium">متوسط 🤔</option>
+        <option value="hard">صعب 🔥</option>
+        <option value="impossible">مستحيل 🧠💥</option>
+      </select>
+    </div>
+  </div>
+
+  <div id="status">دورك الآن (❌)</div>
+
+  <div class="board" id="board">
+    <div class="cell" data-index="0"></div>
+    <div class="cell" data-index="1"></div>
+    <div class="cell" data-index="2"></div>
+    <div class="cell" data-index="3"></div>
+    <div class="cell" data-index="4"></div>
+    <div class="cell" data-index="5"></div>
+    <div class="cell" data-index="6"></div>
+    <div class="cell" data-index="7"></div>
+    <div class="cell" data-index="8"></div>
+  </div>
+
+  <div class="actions">
+    <button id="reset-btn" onclick="resetFullGame()">إعادة اللعبة بالكامل 🔄</button>
+    <a href="‏‏games - 1.html" class="back-btn">⬅️ العودة لصفحة الألعاب</a>
+  </div>
+
+<script>
+  const boardElement = document.getElementById('board');
+  const statusElement = document.getElementById('status');
+  const difficultySelect = document.getElementById('difficulty');
+  const pScoreElement = document.getElementById('p-score');
+  const cScoreElement = document.getElementById('c-score');
+
+  let board = ["", "", "", "", "", "", "", "", ""];
+  let isGameActive = true;
+  let playerScore = 0;
+  let computerScore = 0;
+
+  let currentTurn = "X";
+  let lastRoundStarter = "O";
+
+  const winningConditions = [
+    [0, 1, 2], [3, 4, 5], [6, 7, 8],
+    [0, 3, 6], [1, 4, 7], [2, 5, 8],
+    [0, 4, 8], [2, 4, 6]
+  ];
+
+  function toggleTheme(){
+    const current = document.documentElement.getAttribute('data-theme');
+    if(current === 'light'){
+      document.documentElement.removeAttribute('data-theme');
+    } else {
+      document.documentElement.setAttribute('data-theme', 'light');
+    }
+  }
+
+  boardElement.addEventListener('click', (e) => {
+    const cell = e.target;
+    if(!cell.classList.contains('cell')) return;
+
+    const index = cell.getAttribute('data-index');
+    if(board[index] === "" && isGameActive && currentTurn === "X"){
+      makeMove(index, "X");
+      if(isGameActive){
+        currentTurn = "O";
+        statusElement.innerText = "الآلة تفكر... 🤖";
+        setTimeout(computerMove, 400);
+      }
+    }
+  });
+
+  function makeMove(index, player){
+    board[index] = player;
+    const cell = document.querySelector(`[data-index='${index}']`);
+    cell.innerText = player === "X" ? "❌" : "⭕";
+    cell.classList.add(player.toLowerCase());
+    checkResult();
+  }
+
+  /*
+    منطق مستويات الصعوبة (بعد الضبط):
+    - سهل: عشوائي بالكامل، الآلة لا تمنع ولا تهاجم أبداً
+    - متوسط: نص المرات بتلعب بذكاء بسيط (تمنع/تكمل خط)، والنص التاني عشوائي
+    - صعب: تلعب بأفضل حركة ممكنة (Minimax) في أغلب الأحيان، بس بتسيب فرصة غلط بسيطة
+    - مستحيل: Minimax كامل 100% من غير أي عشوائية، يعني أقصى حاجة تحققها تعادل
+  */
+  function computerMove(){
+    if(!isGameActive || currentTurn !== "O") return;
+    const diff = difficultySelect.value;
+    let bestMove;
+    const rand = Math.random();
+
+    if(diff === "easy"){
+      bestMove = getRandomMove();
+    }
+    else if(diff === "medium"){
+      if(rand < 0.5){
+        bestMove = getImmediateSmartMove();
+        if(bestMove === null) bestMove = getRandomMove();
+      } else {
+        bestMove = getRandomMove();
+      }
+    }
+    else if(diff === "hard"){
+      if(rand < 0.75){
+        bestMove = minimax(board, 0, true).index;
+      } else {
+        bestMove = getImmediateSmartMove();
+        if(bestMove === null) bestMove = getRandomMove();
+      }
+    }
+    else if(diff === "impossible"){
+      bestMove = minimax(board, 0, true).index;
+    }
+
+    if(bestMove === null || bestMove === undefined || bestMove === -1){
+      bestMove = getRandomMove();
+    }
+
+    if(bestMove !== null && bestMove !== undefined){
+      makeMove(bestMove, "O");
+      if(isGameActive){
+        currentTurn = "X";
+        statusElement.innerText = "دورك الآن (❌)";
+      }
+    }
+  }
+
+  function getRandomMove(){
+    let emptyCells = [];
+    board.forEach((val, index) => { if(val === "") emptyCells.push(index); });
+    return emptyCells.length > 0 ? emptyCells[Math.floor(Math.random() * emptyCells.length)] : null;
+  }
+
+  function getImmediateSmartMove(){
+    for(let i = 0; i < winningConditions.length; i++){
+      const [a, b, c] = winningConditions[i];
+      if(board[a] === "O" && board[b] === "O" && board[c] === "") return c;
+      if(board[a] === "O" && board[c] === "O" && board[b] === "") return b;
+      if(board[b] === "O" && board[c] === "O" && board[a] === "") return a;
+    }
+    for(let i = 0; i < winningConditions.length; i++){
+      const [a, b, c] = winningConditions[i];
+      if(board[a] === "X" && board[b] === "X" && board[c] === "") return c;
+      if(board[a] === "X" && board[c] === "X" && board[b] === "") return b;
+      if(board[b] === "X" && board[c] === "X" && board[a] === "") return a;
+    }
+    if(board[4] === "") return 4;
+    return null;
+  }
+
+  function minimax(newBoard, depth, isMax){
+    let availSpots = [];
+    newBoard.forEach((val, index) => { if(val === "") availSpots.push(index); });
+
+    if(checkWinningSilent(newBoard, "X")) return { score: -10 + depth };
+    if(checkWinningSilent(newBoard, "O")) return { score: 10 - depth };
+    if(availSpots.length === 0) return { score: 0 };
+
+    let moves = [];
+    for(let i = 0; i < availSpots.length; i++){
+      let currentMove = {};
+      currentMove.index = availSpots[i];
+      newBoard[availSpots[i]] = isMax ? "O" : "X";
+
+      if(isMax){
+        currentMove.score = minimax(newBoard, depth + 1, false).score;
+      } else {
+        currentMove.score = minimax(newBoard, depth + 1, true).score;
+      }
+
+      newBoard[availSpots[i]] = "";
+      moves.push(currentMove);
+    }
+
+    let bestMove;
+    if(isMax){
+      let bestScore = -Infinity;
+      for(let i = 0; i < moves.length; i++){
+        if(moves[i].score > bestScore){
+          bestScore = moves[i].score;
+          bestMove = i;
+        }
+      }
+    } else {
+      let bestScore = Infinity;
+      for(let i = 0; i < moves.length; i++){
+        if(moves[i].score < bestScore){
+          bestScore = moves[i].score;
+          bestMove = i;
+        }
+      }
+    }
+    return moves[bestMove];
+  }
+
+  function checkWinningSilent(b, p){
+    return (
+      (b[0] === p && b[1] === p && b[2] === p) ||
+      (b[3] === p && b[4] === p && b[5] === p) ||
+      (b[6] === p && b[7] === p && b[8] === p) ||
+      (b[0] === p && b[3] === p && b[6] === p) ||
+      (b[1] === p && b[4] === p && b[7] === p) ||
+      (b[2] === p && b[5] === p && b[8] === p) ||
+      (b[0] === p && b[4] === p && b[8] === p) ||
+      (b[2] === p && b[4] === p && b[6] === p)
+    );
+  }
+
+  function checkResult(){
+    if(checkWinningSilent(board, "X")){
+      isGameActive = false;
+      playerScore++;
+      pScoreElement.innerText = playerScore;
+      statusElement.innerText = "كسبت الجولة! 🎉";
+      setTimeout(checkGameWinner, 1000);
+      return;
+    }
+
+    if(checkWinningSilent(board, "O")){
+      isGameActive = false;
+      computerScore++;
+      cScoreElement.innerText = computerScore;
+      statusElement.innerText = "الآلة كسبت الجولة! 🤖";
+      setTimeout(checkGameWinner, 1000);
+      return;
+    }
+
+    if(!board.includes("")){
+      statusElement.innerText = "تعادل في الجولة! 🤝";
+      isGameActive = false;
+      setTimeout(resetRound, 1200);
+    }
+  }
+
+  function checkGameWinner(){
+    if(playerScore === 3){
+      showMatchOverlay('player', "طحنت الآلة وجمعت 3 نقاط كاملة، بطل حقيقي! 🏆");
+    } else if(computerScore === 3){
+      showMatchOverlay('comp', "الآلة قفّلتها وجمعت 3 نقاط وفازت بالمباراة 🤖");
+    } else {
+      resetRound();
+    }
+  }
+
+  function showMatchOverlay(winner, desc){
+    const title = document.getElementById('matchTitle');
+    if(winner === 'player'){
+      title.innerText = "🏆 فزت بالمباراة!";
+      title.style.color = "#52d17c";
+    } else {
+      title.innerText = "🤖 الآلة فازت بالمباراة";
+      title.style.color = "#ff3d7f";
+    }
+    document.getElementById('matchDesc').innerText = desc;
+    document.getElementById('matchOverlay').style.display = 'flex';
+  }
+
+  function closeMatch(){
+    document.getElementById('matchOverlay').style.display = 'none';
+    resetFullGame();
+  }
+
+  function resetRound(){
+    board = ["", "", "", "", "", "", "", "", ""];
+    isGameActive = true;
+
+    if(lastRoundStarter === "X"){
+      lastRoundStarter = "O";
+      currentTurn = "O";
+      statusElement.innerText = "الآلة تبدأ الجولة... 🤖";
+      setTimeout(computerMove, 500);
+    } else {
+      lastRoundStarter = "X";
+      currentTurn = "X";
+      statusElement.innerText = "دورك تبدأ الجولة (❌)";
+    }
+
+    document.querySelectorAll('.cell').forEach(cell => {
+      cell.innerText = "";
+      cell.className = "cell";
+    });
+  }
+
+  function resetFullGame(){
+    playerScore = 0;
+    computerScore = 0;
+    pScoreElement.innerText = "0";
+    cScoreElement.innerText = "0";
+    lastRoundStarter = "O";
+    resetRound();
+  }
+</script>
+</body>
+</html>
