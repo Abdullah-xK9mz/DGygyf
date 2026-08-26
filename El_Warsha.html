@@ -6,9 +6,10 @@
   <title>ورشة العدّة — أدوات رقمية صغيرة</title>
   <!-- مكتبة QR أحدث وأدق في التعامل مع العربي والرموز -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+  <!-- مكتبة JsBarcode لتوليد كافة أنواع البار كود الشريطي -->
+  <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap');
-
     :root {
       --bg-dark: #0f172a;
       --card-bg: rgba(30, 41, 59, 0.7);
@@ -19,14 +20,12 @@
       --text-muted: #94a3b8;
       --danger: #ef4444;
     }
-
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
       font-family: 'Cairo', sans-serif;
     }
-
     body {
       background-color: var(--bg-dark);
       background-image: 
@@ -40,18 +39,15 @@
       align-items: center;
       padding: 20px;
     }
-
     .container {
       width: 100%;
       max-width: 900px;
     }
-
     /* ===== Header ===== */
     header {
       text-align: center;
       margin-bottom: 30px;
     }
-
     header h1 {
       font-size: 2.2rem;
       font-weight: 800;
@@ -60,25 +56,22 @@
       -webkit-text-fill-color: transparent;
       margin-bottom: 8px;
     }
-
     header p {
       color: var(--text-muted);
       font-size: 0.95rem;
     }
-
-    /* ===== Grid Nav / Pegboard (تصميم الكمبيوتر الأفتراضي) ===== */
+    /* ===== Grid Nav / Pegboard ===== */
     .tools-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr); /* 4 أعمدة في الكمبيوتر */
+      grid-template-columns: repeat(4, 1fr);
       gap: 15px;
       margin-bottom: 25px;
     }
-
     .tool-btn {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
       border-radius: 12px;
-      padding: 20px 15px; /* الحجم الكبير الأصلي */
+      padding: 20px 15px;
       color: var(--text-main);
       display: flex;
       flex-direction: column;
@@ -88,43 +81,35 @@
       backdrop-filter: blur(10px);
       transition: all 0.2s ease;
     }
-
     .tool-btn .icon {
       font-size: 1.8rem;
     }
-
     .tool-btn span {
       font-size: 0.95rem;
       font-weight: 600;
     }
-
     .tool-btn:hover {
       border-color: var(--primary-cyan);
       transform: translateY(-3px);
       box-shadow: 0 8px 20px rgba(0, 242, 254, 0.15);
     }
-
-    /* ===== Media Query للشاشات الصغيرة (الموبايل) ===== */
+    /* ===== Media Query للموبايل ===== */
     @media (max-width: 650px) {
       .tools-grid {
-        grid-template-columns: repeat(2, 1fr); /* عمودين في الموبايل */
+        grid-template-columns: repeat(2, 1fr);
         gap: 10px;
       }
-
       .tool-btn {
-        padding: 10px 8px; /* تصغير حجم الكارت للموبايل */
+        padding: 10px 8px;
         gap: 4px;
       }
-
       .tool-btn .icon {
         font-size: 1.3rem;
       }
-
       .tool-btn span {
         font-size: 0.8rem;
       }
     }
-
     /* ===== Main Panel / Workbench ===== */
     .workbench {
       display: none;
@@ -135,7 +120,6 @@
       backdrop-filter: blur(12px);
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
     }
-
     .back-btn {
       background: transparent;
       border: 1px solid var(--card-border);
@@ -148,33 +132,27 @@
       margin-bottom: 20px;
       transition: all 0.2s;
     }
-
     .back-btn:hover {
       color: var(--text-main);
       border-color: var(--primary-cyan);
     }
-
     .panel-title {
       font-size: 1.4rem;
       font-weight: 700;
       color: var(--primary-cyan);
       margin-bottom: 5px;
     }
-
     .panel-desc {
       color: var(--text-muted);
       font-size: 0.9rem;
       margin-bottom: 20px;
     }
-
     .tool-section {
       display: none;
     }
-
     .tool-section.active {
       display: block;
     }
-
     /* ===== Form Controls ===== */
     label {
       display: block;
@@ -182,7 +160,6 @@
       color: var(--text-muted);
       margin: 12px 0 6px;
     }
-
     input[type="text"],
     input[type="number"],
     input[type="date"],
@@ -198,27 +175,22 @@
       outline: none;
       transition: border-color 0.2s;
     }
-
     input:focus, textarea:focus, select:focus {
       border-color: var(--primary-cyan);
     }
-
     textarea {
       resize: vertical;
       min-height: 90px;
     }
-
     .form-row {
       display: flex;
       gap: 12px;
       flex-wrap: wrap;
     }
-
     .form-row > * {
       flex: 1;
       min-width: 140px;
     }
-
     .action-btn {
       width: 100%;
       background: linear-gradient(135deg, var(--primary-cyan), var(--secondary-blue));
@@ -232,21 +204,17 @@
       margin-top: 15px;
       transition: opacity 0.2s;
     }
-
     .action-btn:hover {
       opacity: 0.9;
     }
-
     .btn-ghost {
       background: transparent;
       border: 1px solid var(--card-border);
       color: var(--text-main);
     }
-
     .btn-ghost:hover {
       border-color: var(--primary-cyan);
     }
-
     .result-box {
       margin-top: 18px;
       background: rgba(15, 23, 42, 0.8);
@@ -260,7 +228,6 @@
       word-break: break-all;
       direction: rtl;
     }
-
     /* ===== Tool Specifics ===== */
     .calc-screen {
       background: rgba(15, 23, 42, 0.9);
@@ -274,7 +241,6 @@
       min-height: 60px;
       margin-bottom: 12px;
     }
-
     .calc-expr {
       font-size: 0.8rem;
       color: var(--text-muted);
@@ -282,13 +248,11 @@
       text-align: left;
       direction: ltr;
     }
-
     .calc-keys {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 8px;
     }
-
     .calc-keys button {
       padding: 14px;
       background: rgba(255, 255, 255, 0.05);
@@ -299,25 +263,20 @@
       font-weight: 600;
       cursor: pointer;
     }
-
     .calc-keys button:hover {
       background: rgba(255, 255, 255, 0.1);
     }
-
     .calc-keys button.op {
       color: var(--primary-cyan);
     }
-
     .calc-keys button.eq {
       background: var(--primary-cyan);
       color: #0f172a;
       grid-row: span 2;
     }
-
     .calc-keys button.clear {
       color: var(--danger);
     }
-
     .dropzone {
       border: 2px dashed var(--card-border);
       border-radius: 8px;
@@ -326,29 +285,33 @@
       color: var(--text-muted);
       cursor: pointer;
     }
-
     .dropzone:hover {
       border-color: var(--primary-cyan);
       color: var(--text-main);
     }
-
     #qrOutput {
       display: flex;
       justify-content: center;
       margin-top: 15px;
     }
-
     #qrCanvas {
       border: 8px solid #fff;
       border-radius: 8px;
       display: none;
     }
+    .barcode-output {
+      display: flex;
+      justify-content: center;
+      background: #ffffff;
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 15px;
+      overflow-x: auto;
+    }
   </style>
 </head>
 <body>
-
 <div class="container">
-
   <header id="mainHeader">
     <h1>ورشة العدّة</h1>
     <p>أدوات رقمية سريعة ومفيدة في مكان واحد</p>
@@ -362,12 +325,7 @@
     <button class="tool-btn" data-tool="password"><span class="icon">🔐</span><span>مولّد كلمات السر</span></button>
     <button class="tool-btn" data-tool="bmi"><span class="icon">⚖️</span><span>حاسبة الكتلة</span></button>
     <button class="tool-btn" data-tool="age"><span class="icon">🎂</span><span>حاسبة العمر</span></button>
-    <button class="tool-btn" data-tool="rand"><span class="icon">🎲</span><span>رقم عشوائي</span></button>
-
-
-    <!-- زرار العودة للرئيسية مساحته مظبوطة ومفصول تحت برواقة -->
-    <a href="index.html" class="menu-btn back-btn">الرئيسية 🏠</a>
-  </div>
+    <button class="tool-btn" data-tool="barcode"><span class="icon">📊</span><span>مولّد البار كود</span></button>
   </nav>
 
   <main class="workbench" id="workbench">
@@ -503,26 +461,34 @@
       <div class="result-box" id="ageOutput">اختر تاريخ ميلادك</div>
     </section>
 
-    <!-- رقم عشوائي -->
-    <section class="tool-section" id="tool-rand">
-      <h2 class="panel-title">مولّد أرقام عشوائية</h2>
-      <p class="panel-desc">اختر نطاق الأرقام المطلوب</p>
-      <div class="form-row">
-        <div>
-          <label>من</label>
-          <input type="number" id="randMin" value="1">
-        </div>
-        <div>
-          <label>إلى</label>
-          <input type="number" id="randMax" value="100">
-        </div>
+    <!-- مولد البار كود الشريطي -->
+    <section class="tool-section" id="tool-barcode">
+      <h2 class="panel-title">مولّد البار كود الشريطي</h2>
+      <p class="panel-desc">إنشاء كافة أنواع أكواد البار كود الشريطية المستطيلة</p>
+      
+      <label>اختر نوع البار كود</label>
+      <select id="barcodeFormat">
+        <option value="CODE128">CODE 128 (شامل: أرقام، حروف، رموز)</option>
+        <option value="EAN13">EAN-13 (منتجات تجارية - 13 رقم)</option>
+        <option value="EAN8">EAN-8 (منتجات صغيرة - 8 أرقام)</option>
+        <option value="UPC">UPC-A (منتجات - 12 رقم)</option>
+        <option value="UPCE">UPC-E (منتجات مصغرة - 6 إلى 8 أرقام)</option>
+        <option value="CODE39">CODE 39 (أرقام وحروف كبيرة)</option>
+        <option value="CODE93">CODE 93 (كود 93 مدمج)</option>
+        <option value="ITF14">ITF (تغليف وشحن - أرقام زوجية)</option>
+        <option value="CODABAR">CODABAR (مكتبات وبنوك)</option>
+      </select>
+
+      <label>الكود أو الرقم المراد تشفيره</label>
+      <input type="text" id="barcodeInput" value="123456789012" placeholder="أدخل النص أو الرقم هنا...">
+
+      <button class="action-btn" onclick="generateBarcode()">إنشاء البار كود</button>
+
+      <div class="barcode-output">
+        <svg id="barcodeCanvas"></svg>
       </div>
-      <div class="result-box" id="randOutput">—</div>
-      <button class="action-btn" onclick="generateRandomNum()">توليد رقم</button>
     </section>
-
   </main>
-
 </div>
 
 <script>
@@ -534,13 +500,16 @@
   document.querySelectorAll('.tool-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       const toolId = btn.dataset.tool;
-      
       document.querySelectorAll('.tool-section').forEach(sec => sec.classList.remove('active'));
       document.getElementById('tool-' + toolId).classList.add('active');
 
       toolsNav.style.display = 'none';
       mainHeader.style.display = 'none';
       workbench.style.display = 'block';
+
+      if (toolId === 'barcode') {
+        generateBarcode();
+      }
     });
   });
 
@@ -673,7 +642,7 @@
     img.src = URL.createObjectURL(selectedImgFile);
   }
 
-  /* ===== 4. QR Generator (المصحح بدعم UTF-8) ===== */
+  /* ===== 4. QR Generator ===== */
   function generateQR() {
     const txt = document.getElementById('qrTextInput').value.trim();
     const canvas = document.getElementById('qrCanvas');
@@ -727,7 +696,7 @@
   }
   calculateBMI();
 
-  /* ===== 7. Age Calculator (المصححة والمفصلة) ===== */
+  /* ===== 7. Age Calculator ===== */
   function calculateAge() {
     const val = document.getElementById('ageInput').value;
     if (!val) return;
@@ -758,17 +727,30 @@
     document.getElementById('ageOutput').textContent = `العمر: ${years} سنة، و ${months} شهر، و ${days} يوم`;
   }
 
-  /* ===== 8. Random Number ===== */
-  function generateRandomNum() {
-    const min = parseInt(document.getElementById('randMin').value) || 0;
-    const max = parseInt(document.getElementById('randMax').value) || 100;
-    const res = Math.floor(Math.random() * (max - min + 1)) + min;
-    document.getElementById('randOutput').textContent = res;
+  /* ===== 8. Barcode Generator (JsBarcode) ===== */
+  function generateBarcode() {
+    const text = document.getElementById('barcodeInput').value.trim();
+    const format = document.getElementById('barcodeFormat').value;
+
+    if (!text) {
+      alert("يرجى إدخال النص أو الرقم أولاً");
+      return;
+    }
+
+    try {
+      JsBarcode("#barcodeCanvas", text, {
+        format: format,
+        lineColor: "#000000",
+        width: 2,
+        height: 85,
+        displayValue: true,
+        fontSize: 14,
+        textMargin: 5
+      });
+    } catch (e) {
+      alert("المدخلات غير متوافقة مع نوع البار كود المختار. تأكد من الصيغة أو عدد الأرقام المطلوبة!");
+    }
   }
 </script>
-<!-- زرار العودة للرئيسية مساحته مظبوطة ومفصول تحت برواقة -->
-    <a href="index.html" class="menu-btn back-btn">الرئيسية 🏠</a>
-  </div>
-  
 </body>
 </html>
