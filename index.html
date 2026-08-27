@@ -6,15 +6,15 @@
     <title>Dark Gift 🎁</title>
     <style>
       :root {
-        --bg-gradient: radial-gradient(ellipse at center, #1b2d42 0%, #070a0f 85%);
-        --card-bg: rgba(15, 23, 36, 0.75);
-        --glow-border: rgba(56, 189, 248, 0.45);
-        --glow-box: 0 0 25px rgba(56, 189, 248, 0.15);
-        --glow-hover: 0 0 30px rgba(56, 189, 248, 0.35);
-        --accent-blue: #38bdf8;
-        --text-white: #f8fafc;
-        --text-sub: #94a3b8;
-        --gold-glow: #facc15;
+        --bg-color: #0b0f19;
+        --card-bg: #131d31;
+        --card-hover: #1b2845;
+        --border-glow: rgba(0, 198, 255, 0.25);
+        --border-hover: #00c6ff;
+        --accent: #00c6ff;
+        --text-main: #f1f5f9;
+        --text-muted: #94a3b8;
+        --gold: #facc15;
       }
 
       * {
@@ -24,186 +24,161 @@
       }
 
       body { 
-        background: var(--bg-gradient);
-        color: var(--text-white); 
+        background: var(--bg-color);
+        background-image: 
+          radial-gradient(circle at 10% 20%, rgba(0, 198, 255, 0.05) 0%, transparent 40%),
+          radial-gradient(circle at 90% 80%, rgba(0, 132, 255, 0.05) 0%, transparent 40%);
+        color: var(--text-main); 
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
         display: flex; 
         flex-direction: column; 
         align-items: center; 
         justify-content: center; 
         min-height: 100vh; 
-        padding: 20px;
-        overflow-x: hidden;
+        padding: 15px;
       }
 
-      /* الهيدر والعناوين */
+      /* الهيدر المدمج */
       .header-container {
         text-align: center;
-        margin-bottom: 35px;
+        margin-bottom: 25px;
       }
 
       h1 { 
-        font-size: 2.4rem; 
-        color: var(--accent-blue); 
-        margin-bottom: 6px;
-        font-weight: 700;
-        letter-spacing: 0.5px;
+        font-size: 1.8rem; 
+        color: var(--text-main); 
+        margin-bottom: 5px;
+        font-weight: 800;
+      }
+
+      h1 span {
+        color: var(--accent);
+        text-shadow: 0 0 15px rgba(0, 198, 255, 0.3);
       }
 
       .sub-title {
-        font-size: 1.8rem;
-        color: var(--accent-blue);
-        font-weight: 700;
-        text-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
+        font-size: 0.95rem;
+        color: var(--text-muted);
+        font-weight: 500;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: rgba(255, 255, 255, 0.03);
+        padding: 4px 12px;
+        border-radius: 50px;
+        border: 1px solid rgba(255, 255, 255, 0.05);
       }
 
-      /* حاوية الكروت */
+      /* شبكة المربعات (4 للكمبيوتر، 2 للموبايل محاذية ومنظمة) */
       .menu-container {
-        display: flex;
-        flex-direction: row-reverse; /* ترتب من اليمين للشمال زي الصورة */
-        justify-content: center;
-        gap: 20px;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 12px;
         width: 100%;
-        max-width: 750px;
-        margin-bottom: 40px;
+        max-width: 900px;
+        margin-bottom: 15px;
       }
 
       .menu-card {
-        display: flex;
-        align-items: center;
         background: var(--card-bg);
-        border: 1.5px solid var(--glow-border);
-        box-shadow: var(--glow-box);
-        border-radius: 16px;
-        padding: 16px 20px;
+        border: 1px solid var(--border-glow);
+        border-radius: 14px;
+        padding: 18px 12px;
         text-decoration: none;
-        color: var(--text-white);
-        flex: 1;
-        min-width: 240px;
-        backdrop-filter: blur(12px);
-        transition: all 0.3s ease;
+        color: var(--text-main);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        transition: all 0.25s ease;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
       }
 
-      .menu-card:hover { 
-        border-color: var(--accent-blue); 
-        box-shadow: var(--glow-hover);
+      .menu-card:hover {
+        background: var(--card-hover);
+        border-color: var(--border-hover);
         transform: translateY(-4px);
+        box-shadow: 0 10px 25px rgba(0, 198, 255, 0.15);
       }
 
-      .card-img { 
-        width: 65px; 
-        height: 65px; 
+      .card-img, .card-icon-reel { 
+        width: 48px; 
+        height: 48px; 
         object-fit: cover;
         border-radius: 12px;
-        margin-left: 15px;
-        flex-shrink: 0;
-      }
-
-      .card-icon-reel {
-        width: 65px;
-        height: 65px;
-        margin-left: 15px;
+        margin-bottom: 10px;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 42px;
-        flex-shrink: 0;
+        font-size: 26px;
+        background: rgba(0, 0, 0, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.05);
       }
 
       .card-text {
         display: flex;
         flex-direction: column;
+        gap: 3px;
       }
 
       .card-title {
-        font-size: 1.25rem;
-        font-weight: bold;
-        color: #ffffff;
-        margin-bottom: 6px;
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: #fff;
       }
 
       .card-sub {
-        font-size: 0.88rem;
-        color: var(--text-sub);
-        display: flex;
-        align-items: center;
-        gap: 5px;
+        font-size: 0.72rem;
+        color: var(--text-muted);
       }
 
-      /* كارت النصيحة والبركة المقتبس من الصورة */
+      /* شريط البركة المدمج */
       .blessing-card {
-        width: 25%;
-        max-width: 250px;
+        width: 100%;
+        max-width: 900px;
         background: var(--card-bg);
-        border: 1px solid var(--glow-border);
-        box-shadow: var(--glow-box);
-        border-radius: 2px;
-        padding: 5px 2px;
+        border: 1px solid var(--border-glow);
+        border-radius: 12px;
+        padding: 10px;
         text-align: center;
-        backdrop-filter: blur(5px);
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
       }
 
       .daily-quote {
-        font-size: 1.1rem;
-        color: #ffffff;
+        font-size: 0.95rem;
+        color: var(--text-main);
         font-weight: 600;
-        margin-bottom: 16px;
-      }
-
-      .quote-label {
-        color: var(--accent-blue);
-        font-weight: bold;
-      }
-
-      /* الزخرفة بين السطرين */
-      .decorative-line {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: 15px 0;
-      }
-
-      .decorative-line::before,
-      .decorative-line::after {
-        content: "";
-        height: 1px;
-        width: 60px;
-        background: rgba(56, 189, 248, 0.3);
-      }
-
-      .decorative-symbol {
-        margin: 0 10px;
-        color: var(--accent-blue);
-        font-size: 14px;
-        opacity: 0.7;
-      }
-
-      .salawat {
-        font-size: 1.5rem;
-        color: var(--text-white);
-        font-weight: bold;
-        letter-spacing: 1px;
-        text-shadow: 0 0 12px rgba(250, 204, 21, 0.3);
       }
 
       .sparkle {
-        color: var(--gold-glow);
+        color: var(--gold);
         margin: 0 6px;
       }
 
-      /* التجاوب التام مع الشاشات والموبايل */
-      @media (max-width: 650px) {
+      /* التجاوب للموبايل: صفين من المربعات 2x2 شيك جداً */
+      @media (max-width: 768px) {
         .menu-container {
-          flex-direction: column;
-          align-items: center;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 10px;
         }
-        .menu-card, .blessing-card {
-          width: 100%;
-          max-width: 330px;
+        .menu-card {
+          padding: 14px 10px;
         }
-        h1 { font-size: 1.8rem; }
-        .sub-title { font-size: 1.4rem; }
-        .salawat { font-size: 1.25rem; }
+        .card-img, .card-icon-reel {
+          width: 40px;
+          height: 40px;
+          font-size: 22px;
+          margin-bottom: 8px;
+        }
+        .card-title {
+          font-size: 0.88rem;
+        }
+        .card-sub {
+          font-size: 0.68rem;
+        }
+        h1 { font-size: 1.5rem; }
       }
     </style>
   </head>
@@ -211,48 +186,58 @@
 
     <!-- الهيدر -->
     <div class="header-container">
-      <h1>الموقع لا يزال تحت التطوير</h1>
-      <div class="sub-title">Dark Gift <span id="device-emoji">🎁</span></div>
+      <h1><span>Dark Gift</span></h1>
+      <div class="sub-title">
+        <span>الموقع تحت التطوير</span>
+        <span id="device-emoji">💻</span>
+      </div>
     </div>
 
     <!-- الكروت الرئيسية -->
     <div class="menu-container">
-        <!-- كارت خلفيات رائعة (يمين) -->
+        <!-- كارت خلفيات رائعة -->
         <a href="wallpapers.html" class="menu-card" id="wallpapers-btn">
             <img src="https://i.postimg.cc/4y8CT3dF/wallpapers.png" alt="Wallpaper" class="card-img">
             <div class="card-text">
-                <span class="card-title">خلفيات رائعة</span>
-                <span class="card-sub">🖼️ فتح الخلفيات</span>
+                <span class="card-title">خلفيات</span>
+                <span class="card-sub">🖼️ استعراض</span>
             </div>
         </a>
 
-     <!-- كارت مكتبة الألعاب -->
-<a href="games.html" class="menu-card" id="games-btn">
-    <div class="card-icon-reel">🎮</div>
-    <div class="card-text">
-        <span class="card-title">مكتبة الألعاب</span>
-        <span class="card-sub">🕹️ فتح الألعاب</span>
-    </div>
-</a>
+        <!-- كارت مكتبة الألعاب -->
+        <a href="games.html" class="menu-card" id="games-btn">
+            <div class="card-icon-reel">🎮</div>
+            <div class="card-text">
+                <span class="card-title">الألعاب</span>
+                <span class="card-sub">🕹️ تصفح</span>
+            </div>
+        </a>
 
-      <!-- كارت مركز الأدوات -->
-<a href="El_Warsha.html" class="menu-card" id="tools-btn">
-    <div class="card-icon-reel">🛠️</div>
-    <div class="card-text">
-        <span class="card-title">مركز الأدوات</span>
-        <span class="card-sub">🧰 فتح الأدوات</span>
-    </div>
-</a>
+        <!-- كارت مركز الأدوات -->
+        <a href="El_Warsha.html" class="menu-card" id="tools-btn">
+            <div class="card-icon-reel">🛠️</div>
+            <div class="card-text">
+                <span class="card-title">الأدوات</span>
+                <span class="card-sub">🧰 الورشة</span>
+            </div>
+        </a>
+
+        <!-- كارت تحميل تيك توك الجديد (تقدر تعدل tiktok.html لأي مسار تحبه) -->
+        <a href="tiktok.html" class="menu-card" id="tiktok-btn">
+            <div class="card-icon-reel">🎵</div>
+            <div class="card-text">
+                <span class="card-title">تنزيل تيك توك</span>
+                <span class="card-sub">⚡ بدون علامة</span>
+            </div>
+        </a>
     </div>
 
     <!-- كارت النصيحة والصلاة على النبي -->
     <div class="blessing-card">
       <p id="daily-quote" class="daily-quote">
-     
-     <span class="sparkle">✨</span> صَلِّ على النبي <span class="sparkle">✨</span>
+        <span class="sparkle">✨</span> صَلِّ على النبي <span class="sparkle">✨</span>
       </p> 
-      
-      </div>
+    </div>
 
     <script>
       function initAdaptiveRouting() {
@@ -262,15 +247,11 @@
         if (/iphone|ipad|ipod/.test(userAgent)) {
           emoji.innerText = "🍏"; 
         } else if (/android/.test(userAgent)) {
-          emoji.innerText = ""; 
+          emoji.innerText = "🤖"; 
         } else {
           emoji.innerText = "💻"; 
         }
       }
-
-      ];
-
-      const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
 
       window.onload = initAdaptiveRouting;
     </script>
