@@ -367,9 +367,7 @@
   </header>
 
   <nav class="tools-grid" id="toolsNav">
-    <button class="tool-btn" data-tool="calc"><span class="icon">🧮</span><span>حاسبة</span></button>
     <button class="tool-btn" data-tool="units"><span class="icon">📐</span><span>تحويل وحدات</span></button>
-    <button class="tool-btn" data-tool="image"><span class="icon">🖼️</span><span>ضغط الصور</span></button>
     <button class="tool-btn" data-tool="qr"><span class="icon">▦</span><span>نص إلى QR</span></button>
     <button class="tool-btn" data-tool="password"><span class="icon">🔐</span><span>مولّد كلمات السر</span></button>
     <button class="tool-btn" data-tool="bmi"><span class="icon">⚖️</span><span>حاسبة الكتلة</span></button>
@@ -383,34 +381,7 @@
   <main class="workbench" id="workbench">
     <button class="back-btn" onclick="showHome()">→ العودة للأدوات</button>
 
-    <!-- الحاسبة -->
-    <section class="tool-section" id="tool-calc">
-      <h2 class="panel-title">الحاسبة</h2>
-      <p class="panel-desc">إجراء العمليات الحسابية السريعة</p>
-      <div class="calc-expr" id="calcExpr"></div>
-      <div class="calc-screen" id="calcScreen">0</div>
-      <div class="calc-keys">
-        <button class="clear" onclick="calcClear()">C</button>
-        <button onclick="calcBack()">⌫</button>
-        <button class="op" onclick="calcPct()">%</button>
-        <button class="op" onclick="calcOp('/')">÷</button>
-        <button onclick="calcNum('7')">7</button>
-        <button onclick="calcNum('8')">8</button>
-        <button onclick="calcNum('9')">9</button>
-        <button class="op" onclick="calcOp('*')">×</button>
-        <button onclick="calcNum('4')">4</button>
-        <button onclick="calcNum('5')">5</button>
-        <button onclick="calcNum('6')">6</button>
-        <button class="op" onclick="calcOp('-')">−</button>
-        <button onclick="calcNum('1')">1</button>
-        <button onclick="calcNum('2')">2</button>
-        <button onclick="calcNum('3')">3</button>
-        <button class="op" onclick="calcOp('+')">+</button>
-        <button onclick="calcNum('0')" style="grid-column: span 2;">0</button>
-        <button onclick="calcDot()">.</button>
-        <button class="eq" onclick="calcEq()">=</button>
-      </div>
-    </section>
+   
 
     <!-- تحويل الوحدات -->
     <section class="tool-section" id="tool-units">
@@ -436,33 +407,7 @@
       </div>
     </section>
 
-    <!-- ضغط الصور -->
-    <section class="tool-section" id="tool-image">
-      <h2 class="panel-title">ضغط وتغيير حجم الصور</h2>
-      <p class="panel-desc">معالجة فورية داخل متصفحك دون رفع الصور</p>
-      <div class="dropzone" onclick="document.getElementById('imgInput').click()">
-        اضغط هنا لاختيار صورة
-        <input type="file" id="imgInput" accept="image/*" style="display:none;" onchange="handleImageSelect(this.files[0])">
-      </div>
-      <div id="imgControls" style="display:none; margin-top: 15px;">
-        <div class="form-row">
-          <div>
-            <label>أقصى عرض (بكسل)</label>
-            <input type="number" id="imgMaxW" value="1200">
-          </div>
-          <div>
-            <label>الجودة (1 - 100)</label>
-            <input type="number" id="imgQuality" value="80" min="1" max="100">
-          </div>
-        </div>
-        <button class="action-btn" onclick="processImage()">ضغط الصورة</button>
-        <div class="result-box" id="imgResultBox" style="display:none;">
-          <img id="imgPreview" style="max-width: 100%; border-radius: 8px; margin-bottom: 10px;">
-          <br>
-          <a id="imgDownloadLink" class="action-btn btn-ghost" style="display:inline-block; text-decoration:none;" download="compressed.jpg">تحميل الصورة</a>
-        </div>
-      </div>
-    </section>
+ 
 
     <!-- QR Code -->
     <section class="tool-section" id="tool-qr">
