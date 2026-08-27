@@ -47,9 +47,15 @@
             margin-bottom: 25px;
         }
 
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
         textarea {
             width: 100%;
-            height: 61px;
+            height: 75px;
             background: #0f172a;
             border: 1px solid #334155;
             border-radius: 10px;
@@ -65,6 +71,25 @@
             border-color: var(--primary);
         }
 
+        .btn-paste {
+            background: #334155;
+            color: #fff;
+            border: 1px solid #475569;
+            padding: 10px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-paste:hover {
+            background: #475569;
+        }
+
         button.btn-main {
             width: 100%;
             background: linear-gradient(45deg, #0052d4, #4364f7, #6fb1fc);
@@ -75,7 +100,7 @@
             font-size: 1.1rem;
             font-weight: bold;
             cursor: pointer;
-            margin-top: 15px;
+            margin-top: 10px;
             transition: 0.3s;
         }
 
@@ -131,23 +156,32 @@
             background: var(--primary);
             color: #fff;
             border: none;
-            padding: 10px 15px;
+            padding: 10px;
             border-radius: 6px;
             font-weight: bold;
             text-align: center;
             cursor: pointer;
             transition: 0.2s;
-            font-size: 0.9rem;
-            flex: 1;
+            font-size: 0.85rem;
+            flex: 1 1 calc(50% - 10px);
         }
 
         .btn-action:hover {
             background: #2563eb;
         }
 
+        .btn-action.btn-audio {
+            background: #8b5cf6;
+        }
+
+        .btn-action.btn-audio:hover {
+            background: #7c3aed;
+        }
+
         .btn-action.btn-preview {
             background: #334155;
             color: #f8fafc;
+            flex: 1 1 100%;
         }
 
         .btn-action.btn-preview:hover {
@@ -191,7 +225,6 @@
             color: var(--secondary);
         }
 
-        /* نافذة المعاينة المكبرة (Modal) */
         .modal {
             display: none;
             position: fixed;
@@ -237,9 +270,12 @@
 
 <div class="container">
     <h1>تحميل فيديوهات وصور تيك توك</h1>
-    <p class="subtitle">يمكنك تحميل حتى خمسه روابط في المره الواحده</p>
+    <p class="subtitle">يمكنك تحميل حتى خمسة روابط في المرة الواحدة</p>
 
-    <textarea id="linksInput" placeholder="ضع روابط التيك توك هنا...&#10;مثال:...https://vm.tiktok.com/"></textarea>
+    <div class="input-group">
+        <textarea id="linksInput" placeholder="ضع روابط التيك توك هنا...&#10;مثال: https://vm.tiktok.com/"></textarea>
+        <button class="btn-paste" onclick="pasteFromClipboard()">📋 لصق من الحافظة</button>
+    </div>
     
     <button class="btn-main" onclick="processLinks()">بدء التحليل والتحميل</button>
 
@@ -248,13 +284,27 @@
     <div class="results-grid" id="results"></div>
 </div>
 
-<!-- Modal المعاينة -->
 <div class="modal" id="imageModal" onclick="closeModal()">
     <span class="modal-close">&times;</span>
     <img class="modal-content" id="modalImage" src="" alt="معاينة المكبرة">
 </div>
 
 <script>
+// وظيفة اللصق من الحافظة
+async function pasteFromClipboard() {
+    const input = document.getElementById('linksInput');
+    try {
+        const text = await navigator.clipboard.readText();
+        if (text) {
+            input.value = input.value ? input.value + '\n' + text : text;
+        } else {
+            alert('الحافظة فارغة!');
+        }
+    } catch (err) {
+        alert('تعذر الوصول للحافظة، يرجى السماح بالصلاحيات أو اللصق يدوياً.');
+    }
+}
+
 async function processLinks() {
     const input = document.getElementById('linksInput').value.trim();
     const resultsContainer = document.getElementById('results');
@@ -304,14 +354,14 @@ async function fetchTikTokData(url) {
             const card = document.createElement('div');
             card.className = 'card';
 
-            // إذا كان الرابط ألبوم صور
+            // ألبوم صور
             if (item.images && item.images.length > 0) {
                 let imagesHTML = '';
                 item.images.forEach((imgUrl, index) => {
                     imagesHTML += `
                         <div class="image-item">
                             <img src="${imgUrl}" alt="صورة ${index + 1}" onclick="openModal('${imgUrl}')">
-                            <button onclick="downloadImage('${imgUrl}', 'tiktok_image_${index + 1}.jpeg', this)" class="btn-action" style="font-size: 0.75rem; padding: 6px;">تنزيل مباشر</button>
+                            <button onclick="downloadFile('${imgUrl}', 'tiktok_image_${index + 1}.jpeg', this)" class="btn-action" style="font-size: 0.75rem; padding: 6px;">تنزيل مباشر</button>
                             <button onclick="openModal('${imgUrl}')" class="btn-action btn-preview" style="font-size: 0.75rem; padding: 4px;">🔍 معاينة</button>
                         </div>
                     `;
@@ -329,8 +379,9 @@ async function fetchTikTokData(url) {
                     <div class="images-gallery">${imagesHTML}</div>
                 `;
             } 
-            // إذا كان الرابط فيديو عادي
+            // فيديو عادي
             else {
+                const musicUrl = item.music || item.music_info?.play;
                 card.innerHTML = `
                     <div class="card-header">
                         <img class="thumb" src="${item.cover}" alt="غلاف">
@@ -340,7 +391,8 @@ async function fetchTikTokData(url) {
                         </div>
                     </div>
                     <div class="actions-group">
-                        <button onclick="downloadVideo('${item.play}', 'tiktok_video.mp4', this)" class="btn-action">⬇️ تنزيل الفيديو</button>
+                        <button onclick="downloadFile('${item.play}', 'tiktok_video.mp4', this)" class="btn-action">🎬 تنزيل الفيديو</button>
+                        ${musicUrl ? `<button onclick="downloadFile('${musicUrl}', 'tiktok_audio.mp3', this)" class="btn-action btn-audio">🎵 تنزيل الصوت</button>` : ''}
                         <button onclick="toggleVideoPreview(this, '${item.play}')" class="btn-action btn-preview">👁️ معاينة الفيديو</button>
                     </div>
                     <div class="video-container" style="display:none;"></div>
@@ -356,38 +408,8 @@ async function fetchTikTokData(url) {
     }
 }
 
-// تنزيل الصورة وتحديث الزرار لـ "تم التنزيل ✅"
-async function downloadImage(fileUrl, fileName, btnElement) {
-    btnElement.innerText = 'جاري التحميل... ⏳';
-    btnElement.disabled = true;
-
-    try {
-        const response = await fetch(fileUrl);
-        const blob = await response.blob();
-        
-        const blobUrl = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.style.display = 'none';
-        a.href = blobUrl;
-        a.download = fileName;
-        
-        document.body.appendChild(a);
-        a.click();
-        
-        window.URL.revokeObjectURL(blobUrl);
-        document.body.removeChild(a);
-
-        btnElement.innerText = 'تم التنزيل ✅';
-        btnElement.classList.add('downloaded');
-    } catch (error) {
-        window.open(fileUrl, '_blank');
-        btnElement.innerText = 'تم التنزيل ✅';
-        btnElement.classList.add('downloaded');
-    }
-}
-
-// تنزيل الفيديو
-async function downloadVideo(fileUrl, fileName, btnElement) {
+// دالة موحدة لتحميل الملفات (فيديو / صوت / صور)
+async function downloadFile(fileUrl, fileName, btnElement) {
     const originalText = btnElement.innerText;
     btnElement.innerText = 'جاري التنزيل... ⏳';
     btnElement.disabled = true;
@@ -417,7 +439,15 @@ async function downloadVideo(fileUrl, fileName, btnElement) {
     }
 }
 
-// فتح وإغلاق معاينة الفيديو
+function showErrorCard(url, message) {
+    const resultsContainer = document.getElementById('results');
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.style.borderRightColor = '#ef4444';
+    card.innerHTML = `<div style="color: #ef4444;">❌ <strong>خطأ:</strong> ${message}<br><small>${url}</small></div>`;
+    resultsContainer.appendChild(card);
+}
+
 function toggleVideoPreview(btn, videoUrl) {
     const card = btn.closest('.card');
     const container = card.querySelector('.video-container');
@@ -433,7 +463,6 @@ function toggleVideoPreview(btn, videoUrl) {
     }
 }
 
-// فتح وإغلاق Modal معاينة الصور
 function openModal(imgUrl) {
     const modal = document.getElementById('imageModal');
     const modalImg = document.getElementById('modalImage');
