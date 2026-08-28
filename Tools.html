@@ -1110,6 +1110,20 @@
       alert("المدخلات غير متوافقة مع نوع البار كود المختار. تأكد من الصيغة أو عدد الأرقام المطلوبة!");
     }
   }
+  function showCustomAlert(message) {
+  document.getElementById('customAlertText').textContent = message;
+  document.getElementById('customAlertModal').style.display = 'flex';
+}
+
+function closeCustomAlert() {
+  document.getElementById('customAlertModal').style.display = 'none';
+}
 </script>
+  <div class="custom-alert-overlay" id="customAlertModal">
+  <div class="custom-alert-card">
+    <div class="custom-alert-msg" id="customAlertText">نص الرسالة هنا</div>
+    <button class="custom-alert-btn" onclick="closeCustomAlert()">حسناً</button>
+  </div>
+</div>
 </body>
 </html>
