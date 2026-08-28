@@ -112,6 +112,28 @@
                 opacity: 0.9;
             }
 
+            .btn-back {
+                width: 100%;
+                background: #334155;
+                color: #f8fafc;
+                border: 1px solid #475569;
+                padding: 12px;
+                border-radius: 10px;
+                font-size: 1rem;
+                font-weight: bold;
+                cursor: pointer;
+                margin-top: 10px;
+                transition: 0.2s;
+                display: block;
+                text-align: center;
+                text-decoration: none;
+                box-sizing: border-box;
+            }
+
+            .btn-back:hover {
+                background: #475569;
+            }
+
             .results-grid {
                 margin-top: 30px;
                 display: grid;
@@ -299,6 +321,22 @@
                 letter-spacing: 0.3px;
             }
 
+            .btn-back {
+                width: 100%;
+                background: #131c2e;
+                color: #94a3b8;
+                border: 1px solid #1e2d4a;
+                padding: 14px;
+                border-radius: 14px;
+                font-size: 0.95rem;
+                font-weight: 700;
+                margin-top: 10px;
+                display: block;
+                text-align: center;
+                text-decoration: none;
+                box-sizing: border-box;
+            }
+
             .results-grid {
                 margin-top: 25px;
                 display: flex;
@@ -455,6 +493,7 @@
     </div>
     
     <button class="btn-main" onclick="processLinks()">بدء التحليل والتحميل</button>
+    <a href="index.html" class="btn-back">⬅️ الرجوع للخلف</a>
 
     <div class="loader" id="loader">جاري العثور على الفيديوهات والصور...</div>
 
