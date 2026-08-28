@@ -357,6 +357,98 @@
       margin-top: 15px;
       overflow-x: auto;
     }
+
+    /* ===== عناصر منتقي التاريخ المخصص لحاسبة العمر ===== */
+    .custom-date-trigger {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .custom-picker-modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(8px);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 15px;
+    }
+    .custom-picker-card {
+      background: #1e293b;
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 20px;
+      width: 100%;
+      max-width: 360px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    .picker-columns {
+      display: flex;
+      gap: 10px;
+      margin: 20px 0;
+    }
+    .picker-col {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: rgba(15, 23, 42, 0.5);
+      padding: 10px 5px;
+      border-radius: 12px;
+      border: 1px solid var(--card-border);
+    }
+    .picker-col label {
+      font-size: 0.8rem;
+      color: var(--primary-cyan);
+      margin: 0 0 8px 0;
+      font-weight: bold;
+    }
+    .step-btn {
+      width: 100%;
+      height: 38px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--card-border);
+      color: var(--primary-cyan);
+      font-size: 1.2rem;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .step-btn:active {
+      background: var(--primary-cyan);
+      color: #0f172a;
+    }
+    .picker-col input {
+      text-align: center;
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin: 8px 0;
+      padding: 8px 4px;
+      border-radius: 6px;
+    }
+    .picker-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 15px;
+    }
+    .picker-actions button {
+      flex: 1;
+      padding: 10px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      cursor: pointer;
+      border: none;
+    }
+    .btn-set { background: var(--primary-cyan); color: #0f172a; }
+    .btn-clear { background: rgba(255, 255, 255, 0.1); color: var(--text-main); }
+    .btn-cancel { background: rgba(239, 68, 68, 0.2); color: var(--danger); border: 1px solid rgba(239, 68, 68, 0.4) !important; }
   </style>
 </head>
 <body>
@@ -381,7 +473,7 @@
   <main class="workbench" id="workbench">
     <button class="back-btn" onclick="showHome()">→ العودة للأدوات</button>
 
-   
+    
 
     <!-- تحويل الوحدات -->
     <section class="tool-section" id="tool-units">
@@ -407,7 +499,7 @@
       </div>
     </section>
 
- 
+  
 
     <!-- QR Code -->
     <section class="tool-section" id="tool-qr">
@@ -454,8 +546,45 @@
       <h2 class="panel-title">حاسبة العمر الدقيقة</h2>
       <p class="panel-desc">احسب عمرك بالتفصيل (سنة، شهر، يوم)</p>
       <label>تاريخ الميلاد</label>
-      <input type="date" id="ageInput" onchange="calculateAge()">
+      
+      <!-- مدخل التاريخ السريع الخاص بتجربة الموبايل -->
+      <div class="custom-date-trigger" onclick="openPickerModal()">
+        <input type="text" id="ageInputDisplay" readonly placeholder="اختر تاريخ الميلاد..." style="cursor: pointer;">
+      </div>
+
       <div class="result-box" id="ageOutput">اختر تاريخ ميلادك</div>
+
+      <!-- النافذة المنبثقة لاختيار التاريخ بالتفصيل -->
+      <div class="custom-picker-modal" id="pickerModal">
+        <div class="custom-picker-card">
+          <h3 style="text-align: center; color: var(--primary-cyan); font-size: 1.1rem;">تحديد تاريخ الميلاد</h3>
+          <div class="picker-columns">
+            <div class="picker-col">
+              <label>اليوم</label>
+              <button class="step-btn" onclick="adjustPickerVal('day', 1)">+</button>
+              <input type="number" id="pDay" min="1" max="31" value="1">
+              <button class="step-btn" onclick="adjustPickerVal('day', -1)">-</button>
+            </div>
+            <div class="picker-col">
+              <label>الشهر</label>
+              <button class="step-btn" onclick="adjustPickerVal('month', 1)">+</button>
+              <input type="number" id="pMonth" min="1" max="12" value="1">
+              <button class="step-btn" onclick="adjustPickerVal('month', -1)">-</button>
+            </div>
+            <div class="picker-col">
+              <label>السنة</label>
+              <button class="step-btn" onclick="adjustPickerVal('year', 1)">+</button>
+              <input type="number" id="pYear" min="1900" max="2099" value="2000">
+              <button class="step-btn" onclick="adjustPickerVal('year', -1)">-</button>
+            </div>
+          </div>
+          <div class="picker-actions">
+            <button class="btn-cancel" onclick="closePickerModal()">إلغاء</button>
+            <button class="btn-clear" onclick="clearPickerDate()">محو</button>
+            <button class="btn-set" onclick="confirmPickerDate()">تعيين</button>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- مولد البار كود الشريطي -->
@@ -693,12 +822,74 @@
   }
   calculateBMI();
 
-  /* ===== 7. Age Calculator ===== */
+  /* ===== 7. Age Calculator (تعديل منتقي التاريخ التفاعلي) ===== */
+  let selectedBirthDate = null;
+
+  function openPickerModal() {
+    const now = new Date();
+    if (!selectedBirthDate) {
+      document.getElementById('pDay').value = now.getDate();
+      document.getElementById('pMonth').value = now.getMonth() + 1;
+      document.getElementById('pYear').value = now.getFullYear() - 20;
+    } else {
+      document.getElementById('pDay').value = selectedBirthDate.getDate();
+      document.getElementById('pMonth').value = selectedBirthDate.getMonth() + 1;
+      document.getElementById('pYear').value = selectedBirthDate.getFullYear();
+    }
+    document.getElementById('pickerModal').style.display = 'flex';
+  }
+
+  function closePickerModal() {
+    document.getElementById('pickerModal').style.display = 'none';
+  }
+
+  function adjustPickerVal(type, delta) {
+    if (type === 'day') {
+      const el = document.getElementById('pDay');
+      let val = (parseInt(el.value) || 1) + delta;
+      if (val < 1) val = 31;
+      if (val > 31) val = 1;
+      el.value = val;
+    } else if (type === 'month') {
+      const el = document.getElementById('pMonth');
+      let val = (parseInt(el.value) || 1) + delta;
+      if (val < 1) val = 12;
+      if (val > 12) val = 1;
+      el.value = val;
+    } else if (type === 'year') {
+      const el = document.getElementById('pYear');
+      let val = (parseInt(el.value) || 2000) + delta;
+      el.value = val;
+    }
+  }
+
+  function clearPickerDate() {
+    selectedBirthDate = null;
+    document.getElementById('ageInputDisplay').value = '';
+    document.getElementById('ageOutput').textContent = 'اختر تاريخ ميلادك';
+    closePickerModal();
+  }
+
+  function confirmPickerDate() {
+    const d = parseInt(document.getElementById('pDay').value);
+    const m = parseInt(document.getElementById('pMonth').value);
+    const y = parseInt(document.getElementById('pYear').value);
+
+    if (!d || !m || !y || d < 1 || d > 31 || m < 1 || m > 12 || y < 1900) {
+      alert('يرجى إدخال تاريخ صحيح');
+      return;
+    }
+
+    selectedBirthDate = new Date(y, m - 1, d);
+    document.getElementById('ageInputDisplay').value = `${y}/${m}/${d}`;
+    closePickerModal();
+    calculateAge();
+  }
+
   function calculateAge() {
-    const val = document.getElementById('ageInput').value;
-    if (!val) return;
-    
-    const birth = new Date(val);
+    if (!selectedBirthDate) return;
+
+    const birth = selectedBirthDate;
     const now = new Date();
 
     if (birth > now) {
