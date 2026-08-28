@@ -87,7 +87,7 @@
   .eyebrow{
     font-size: 11px;
     letter-spacing: 3px;
-    color: var(--ink-dim);
+color: #00f3ff;
     text-transform: uppercase;
     margin-bottom: 6px;
   }
@@ -130,7 +130,30 @@
     box-shadow: 0 8px 20px -8px rgba(62,201,214,0.35);
   }
 
-  /* ===== عناصر مشترك للتحكم والأزرار ===== */
+  /* زر الرئيسية بنفس شكل الكروت العادية مع توهج نيون خارجي */
+  .menu-btn.back-home-btn {
+    margin-top: 18px;
+    position: relative;
+    border-color: rgba(255, 61, 127, 0.6);
+    box-shadow: 0 0 12px rgba(255, 61, 127, 0.25);
+  }
+  .menu-btn.back-home-btn::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: 10%;
+    width: 80%;
+    height: 1px;
+    background: var(--panel-line);
+  }
+  .menu-btn.back-home-btn:hover {
+    background: #171b24;
+    border-color: var(--pink);
+    transform: translateY(-2px);
+    box-shadow: 0 0 20px rgba(255, 61, 127, 0.5), 0 8px 20px -8px rgba(255, 61, 127, 0.4);
+  }
+
+  /* ===== عناصر مشتركة ===== */
   .btn-nav-back {
     padding: 9px 20px;
     font-size: 13.5px;
@@ -144,23 +167,6 @@
     transition: 0.2s;
   }
   .btn-nav-back:hover { border-color: var(--cyan); }
-
-  .theme-btn{
-    position: fixed;
-    top: 14px; left: 14px;
-    background: var(--panel);
-    color: var(--ink);
-    border: 1px solid var(--panel-line);
-    padding: 8px 14px;
-    border-radius: 999px;
-    cursor: pointer;
-    font-family: inherit;
-    font-weight: 600;
-    font-size: 12.5px;
-    z-index: 100;
-    transition: 0.2s;
-  }
-  .theme-btn:hover{ border-color: var(--cyan); }
 
   /* ===== 1. لعبة كروت الذاكرة ===== */
   #page-memory {
@@ -225,8 +231,6 @@
 </head>
 <body>
 
-  <!-- زر تبديل الثيم العام للمشروع -->
-
   <!-- ==================== 1. القائمة الرئيسية ==================== -->
   <div id="page-menu" class="view-page active">
     <div class="eyebrow">اختر تحديك</div>
@@ -235,7 +239,9 @@
       <button onclick="switchPage('page-memory')" class="menu-btn">لعبة كروت الذاكرة 🧠</button>
       <button onclick="switchPage('page-ox')" class="menu-btn">لعبة إكس أو ❌⭕</button>
       <button onclick="switchPage('page-flappy')" class="menu-btn">الطائر المغامر 🐦</button>
-      <a href="index.html" class="menu-btn menu-btn-home">الرجوع للرئيسية 🏠</a>
+
+      <!-- زر الرئيسية بالشكل العادي والتوهج النيون الخارجي -->
+      <a href="index.html" class="menu-btn back-home-btn">الرئيسية 🏠</a>
     </div>
   </div>
 
@@ -262,7 +268,7 @@
     <div class="game-grid" id="mem-grid"></div>
     <div class="actions">
       <button id="mem-reset-btn" onclick="resetMemGame()">إعادة اللعبة 🔄</button>
-      <button class="btn-nav-back" onclick="switchPage('page-menu')">الرئيسية 🏠</button>
+      <button class="btn-nav-back" onclick="switchPage('page-menu')">القائمة الرئيسية 📋</button>
     </div>
   </div>
 
@@ -289,7 +295,7 @@
     <div class="ox-grid" id="ox-grid"></div>
     <div class="actions">
       <button class="btn-nav-back" style="color:var(--cyan); border-color:var(--cyan);" onclick="resetOxGame()">جولة جديدة 🔄</button>
-      <button class="btn-nav-back" onclick="switchPage('page-menu')">الرئيسية 🏠</button>
+      <button class="btn-nav-back" onclick="switchPage('page-menu')">القائمة الرئيسية 📋</button>
     </div>
   </div>
 
@@ -303,7 +309,7 @@
         <h2 style="color:var(--cyan); margin-bottom:20px;">⏸ توقف مؤقت</h2>
         <div style="display:flex; flex-direction:column; gap:10px; width:220px;">
           <button class="win-btn" id="flappy-resume-btn">استمرار ▶️</button>
-          <button class="btn-nav-back" onclick="switchPage('page-menu')">الرئيسية 🏠</button>
+          <button class="btn-nav-back" onclick="switchPage('page-menu')">القائمة الرئيسية 📋</button>
         </div>
       </div>
 
@@ -312,35 +318,24 @@
         <h2 id="flappy-msg-title" style="color:var(--amber);">طير وتحدى أصحابك! 🐦</h2>
         <p id="flappy-msg-desc" style="color:var(--ink-dim); max-width:280px; line-height:1.6; margin-bottom:20px;">اضغط على الشاشة أو مسطرة الكيبورد Space لتجعل العصفور يطير.</p>
         <button class="win-btn" id="flappy-start-btn">إبدأ اللعب 🎮</button>
-        <button class="btn-nav-back" style="margin-top:15px;" onclick="switchPage('page-menu')">الرئيسية 🏠</button>
+        <button class="btn-nav-back" style="margin-top:15px;" onclick="switchPage('page-menu')">القائمة الرئيسية 📋</button>
       </div>
 
       <div id="flappy-bird"></div>
     </div>
   </div>
 
-
   <script>
-    /* ==================== إدارة التنقل العام والنمط ==================== */
-    function toggleGlobalTheme() {
-      const current = document.documentElement.getAttribute('data-theme');
-      if (current === 'light') document.documentElement.removeAttribute('data-theme');
-      else document.documentElement.setAttribute('data-theme', 'light');
-    }
-
+    /* ==================== إدارة التنقل العام ==================== */
     function switchPage(pageId) {
-      // إيقاف المحركات في الألعاب المستمرة عند التنقل
       if (typeof stopFlappyLoop === 'function') stopFlappyLoop();
-      if (typeof stopSpaceLoop === 'function') stopSpaceLoop();
 
       document.querySelectorAll('.view-page').forEach(p => p.classList.remove('active'));
       const activePage = document.getElementById(pageId);
       activePage.classList.add('active');
 
-      // تهيئة الألعاب عند فتح صفحاتها
       if (pageId === 'page-memory') resetMemGame();
       if (pageId === 'page-ox') resetOxGame();
-      if (pageId === 'page-space') initSpaceCanvas();
     }
 
     /* ==================== 1. منطق كروت الذاكرة ==================== */
@@ -366,7 +361,7 @@
       document.getElementById('mem-moves').innerText = '0';
       document.getElementById('mem-matches').innerText = '0';
 
-      memCards.forEach((emoji, idx) => {
+      memCards.forEach((emoji) => {
         const card = document.createElement('div');
         card.className = 'card';
         card.setAttribute('data-emoji', emoji);
@@ -476,7 +471,6 @@
       if (mode === 'ai-easy') {
         move = emptyIndices[Math.floor(Math.random() * emptyIndices.length)];
       } else {
-        // ذكاء صلب: فوز فوراً، أو منع المنافس، أو المنتصف
         move = findBestOxMove('O') ?? findBestOxMove('X') ?? (oxBoard[4] === null ? 4 : emptyIndices[Math.floor(Math.random() * emptyIndices.length)]);
       }
       makeOxMove(move, 'O');
@@ -603,133 +597,6 @@
 
     function stopFlappyLoop() {
       flappyActive = false; clearInterval(flappyLoop); clearTimeout(flappyPipesTimeout);
-    }
-
-    /* ==================== 4. منطق حرب الفضاء ==================== */
-    let spCanvas, spCtx, spRaf, spActive = false;
-    let spW = 0, spH = 0, spScore = 0, spWave = 1, spLives = 3, spFrame = 0;
-    let spPlayer = { x: 0, y: 0, r: 16 }, spBullets = [], spEnemies = [], spEnemyBullets = [];
-
-    function initSpaceCanvas() {
-      const stage = document.getElementById('space-stage');
-      spCanvas = document.getElementById('space-canvas');
-      spCtx = spCanvas.getContext('2d');
-      spW = stage.clientWidth; spH = stage.clientHeight;
-      spCanvas.width = spW; spCanvas.height = spH;
-      spPlayer.x = spW / 2; spPlayer.y = spH - 80;
-    }
-
-    function startSpaceGame() {
-      initSpaceCanvas();
-      spScore = 0; spWave = 1; spLives = 3; spFrame = 0;
-      spBullets = []; spEnemies = []; spEnemyBullets = [];
-      document.getElementById('sp-hudScore').innerText = '0';
-      document.getElementById('sp-hudWave').innerText = '1';
-      document.getElementById('sp-hudLives').innerText = '❤️❤️❤️';
-      document.getElementById('sp-startScreen').style.display = 'none';
-      document.getElementById('sp-gameOverScreen').style.display = 'none';
-      document.getElementById('sp-pauseOverlay').style.display = 'none';
-
-      spActive = true;
-      spawnSpaceWave();
-      cancelAnimationFrame(spRaf);
-      runSpaceLoop();
-    }
-
-    function spawnSpaceWave() {
-      spEnemies = [];
-      const cols = 5, rows = 3;
-      for (let r = 0; r < rows; r++) {
-        for (let c = 0; c < cols; c++) {
-          spEnemies.push({
-            x: 50 + c * ((spW - 100) / (cols - 1 || 1)),
-            y: 60 + r * 40,
-            r: 14, hp: 1, vx: 1.5
-          });
-        }
-      }
-    }
-
-    function runSpaceLoop() {
-      if (!spActive) return;
-      spFrame++;
-      spCtx.clearRect(0, 0, spW, spH);
-
-      // رسم المركبة
-      spCtx.fillStyle = '#3ec9d6';
-      spCtx.beginPath();
-      spCtx.moveTo(spPlayer.x, spPlayer.y - 16);
-      spCtx.lineTo(spPlayer.x + 16, spPlayer.y + 12);
-      spCtx.lineTo(spPlayer.x - 16, spPlayer.y + 12);
-      spCtx.closePath();
-      spCtx.fill();
-
-      // اطلاق ناري تلقائي
-      if (spFrame % 12 === 0) {
-        spBullets.push({ x: spPlayer.x, y: spPlayer.y - 18, vy: -9 });
-      }
-
-      // تحديث وإظهار الرصاص
-      spCtx.fillStyle = '#f2b134';
-      for (let i = spBullets.length - 1; i >= 0; i--) {
-        let b = spBullets[i];
-        b.y += b.vy;
-        spCtx.fillRect(b.x - 2, b.y, 4, 10);
-        if (b.y < -10) spBullets.splice(i, 1);
-      }
-
-      // تحديث رسم الأعداء
-      spCtx.fillStyle = '#ff3d7f';
-      for (let i = spEnemies.length - 1; i >= 0; i--) {
-        let e = spEnemies[i];
-        e.x += e.vx;
-        if (e.x < 20 || e.x > spW - 20) e.vx *= -1;
-
-        spCtx.beginPath();
-        spCtx.arc(e.x, e.y, e.r, 0, Math.PI * 2);
-        spCtx.fill();
-
-        // التصادم مع الطلقات
-        for (let j = spBullets.length - 1; j >= 0; j--) {
-          let b = spBullets[j];
-          if (Math.hypot(e.x - b.x, e.y - b.y) < e.r + 4) {
-            spEnemies.splice(i, 1);
-            spBullets.splice(j, 1);
-            spScore += 10;
-            document.getElementById('sp-hudScore').innerText = spScore;
-            break;
-          }
-        }
-      }
-
-      if (spEnemies.length === 0) {
-        spWave++;
-        document.getElementById('sp-hudWave').innerText = spWave;
-        spawnSpaceWave();
-      }
-
-      spRaf = requestAnimationFrame(runSpaceLoop);
-    }
-
-    // سحب المركبة باللمس/الماوس
-    document.getElementById('space-stage').addEventListener('pointermove', (e) => {
-      if (!spActive) return;
-      const rect = spCanvas.getBoundingClientRect();
-      spPlayer.x = Math.max(20, Math.min(spW - 20, e.clientX - rect.left));
-    });
-
-    function pauseSpaceGame() {
-      if (!spActive) return;
-      spActive = false; cancelAnimationFrame(spRaf);
-      document.getElementById('sp-pauseOverlay').style.display = 'flex';
-    }
-    function resumeSpaceGame() {
-      spActive = true;
-      document.getElementById('sp-pauseOverlay').style.display = 'none';
-      runSpaceLoop();
-    }
-    function stopSpaceLoop() {
-      spActive = false; cancelAnimationFrame(spRaf);
     }
   </script>
 </body>
