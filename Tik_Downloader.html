@@ -15,8 +15,8 @@
         }
 
         /* =========================================================
-           1. تصميم الكمبيوتر (Desktop Styles - للشاشات الأكبر من 768px)
-           ========================================================= */
+            1. تصميم الكمبيوتر (Desktop Styles - للشاشات الأكبر من 768px)
+            ========================================================= */
         @media (min-width: 769px) {
             body {
                 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -238,8 +238,8 @@
         }
 
         /* =========================================================
-           2. تصميم الموبايل (Mobile - للشاشات حتى 768px)
-           ========================================================= */
+            2. تصميم الموبايل (Mobile - للشاشات حتى 768px)
+            ========================================================= */
         @media (max-width: 768px) {
             body {
                 font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -426,8 +426,8 @@
         }
 
         /* =========================================================
-           3. العناصر المشتركة (Shared Components)
-           ========================================================= */
+            3. العناصر المشتركة (Shared Components)
+            ========================================================= */
         .btn-action.downloaded {
             background: #10b981 !important;
             color: #fff !important;
@@ -469,6 +469,7 @@
             color: #fff;
             font-size: 35px;
             font-weight: bold;
+            cursor: pointer;
         }
 
         video.preview-video {
@@ -493,7 +494,7 @@
     </div>
     
     <button class="btn-main" onclick="processLinks()">بدء التحليل والتحميل</button>
-    <a href="Tools.html" class="btn-back">⬅️ الرجوع للخلف</a>
+    <a href="index.html" class="btn-back">⬅️ الرجوع للخلف</a>
 
     <div class="loader" id="loader">جاري العثور على الفيديوهات والصور...</div>
 
@@ -517,7 +518,6 @@ async function pasteFromClipboard() {
     const input = document.getElementById('linksInput');
     input.focus();
 
-    // 1. تجربة جلب النص عبر API الحافظة المباشر لإظهار نافذة السماح/الرفض
     if (navigator.clipboard && navigator.clipboard.readText) {
         try {
             const text = await navigator.clipboard.readText();
@@ -530,7 +530,6 @@ async function pasteFromClipboard() {
         }
     }
 
-    // 2. بديل آمن وسريع في حال تم حظر الصلاحية من المتصفح (يفتح خيار اللصق المنبثق فوق لوحة المفاتيح فوراً)
     try {
         document.execCommand('insertText', false, await navigator.clipboard.readText());
     } catch (e) {
@@ -617,7 +616,7 @@ async function fetchTikTokData(url) {
                 const musicUrl = item.music || item.music_info?.play;
                 card.innerHTML = `
                     <div class="card-header">
-                        <img class="thumb" src="${item.cover}" alt="غلاف">
+                        <img class="thumb" src="${item.cover}" alt="غلاف" onclick="openModal('${item.cover}')">
                         <div class="card-title">
                             <strong>[فيديو]</strong><br>
                             ${item.title || 'بدون عنوان'}
@@ -695,6 +694,18 @@ function toggleVideoPreview(btn, videoUrl) {
     }
 }
 
+// دوال معاينة الصور (Modal)
+function openModal(imgSrc) {
+    const modal = document.getElementById('imageModal');
+    const modalImg = document.getElementById('modalImage');
+    modal.style.display = 'flex';
+    modalImg.src = imgSrc;
+}
+
+function closeModal() {
+    const modal = document.getElementById('imageModal');
+    modal.style.display = 'none';
+}
 </script>
 </body>
 </html>
